@@ -6,7 +6,7 @@ import CalendarioHorario from '@/components/02-molecules/CalendarioHorario';
 
 interface Horario {
   idHorario: number;
-  idInstructor: number;  // Ajustamos para utilizar el idInstructor
+  idInstructor: number;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -21,19 +21,22 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-  instructor: Instructor;  // Relacionamos con el instructor
+  instructor: {
+    nombreInstructor: string;  // Asegurarse de que usa el campo correcto para el nombre del instructor
+  };
 }
 
 interface Instructor {
   idInstructor: number;
-  nombre: string;  // El nombre del instructor que cargaremos desde la API
+  nombreInstructor: string;  // Cambiado a nombreInstructor para mantener la consistencia
 }
 
 export default function CalendarioInstructor() {
-  const { idInstructor } = useParams(); // Ahora estamos utilizando idInstructor en la URL
+  const { idInstructor } = useParams(); // Utilizamos idInstructor en la URL
   const [horarios, setHorarios] = useState<Horario[]>([]);
   const [instructor, setInstructor] = useState<Instructor | null>(null); // Estado para almacenar los datos del instructor
 
+  // Fetch para obtener los horarios del instructor
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
@@ -42,6 +45,10 @@ export default function CalendarioInstructor() {
           throw new Error('Error al obtener los horarios');
         }
         const data: Horario[] = await response.json();
+        
+        // Log para verificar los datos que llegan del backend
+        console.log('Horarios con Instructor:', data);
+
         setHorarios(data);
       } catch (error) {
         console.error('Error al cargar los horarios:', error);
@@ -55,6 +62,10 @@ export default function CalendarioInstructor() {
           throw new Error('Error al obtener los datos del instructor');
         }
         const instructorData: Instructor = await response.json();
+
+        // Log para verificar los datos del instructor
+        console.log('Datos del Instructor:', instructorData);
+
         setInstructor(instructorData);
       } catch (error) {
         console.error('Error al cargar el instructor:', error);
@@ -67,8 +78,7 @@ export default function CalendarioInstructor() {
 
   return (
     <div>
-      <h2>Calendario de Horarios de {instructor?.nombre || 'Instructor'}</h2>
-      {/* Reutilizamos el componente de calendario */}
+      <h2>Calendario de Horarios de {instructor?.nombreInstructor || 'Instructor'}</h2>
       <CalendarioHorario horarios={horarios} tipoFiltro="Instructor" />
     </div>
   );

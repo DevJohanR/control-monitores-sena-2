@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 
 interface Horario {
   idHorario: number;
-  idInstructor: number; // Usamos idInstructor ahora
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -20,34 +19,33 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
+  instructor: Instructor;  // El instructor ya viene incluido
 }
 
 interface Instructor {
   idInstructor: number;
-  nombre: string;
+  nombreInstructor: string;  // El nombre del instructor que cargaremos desde la API
 }
 
 export default function HorarioInstructor() {
   const [horarios, setHorarios] = useState<Horario[]>([]);
-  const [instructores, setInstructores] = useState<Instructor[]>([]); // Estado para los instructores
   const router = useRouter();
 
+  // Fetch para obtener los horarios con los instructores incluidos
   useEffect(() => {
-    // Cargar los instructores
-    const fetchInstructores = async () => {
-      const response = await fetch('/api/instructores');
-      const data: Instructor[] = await response.json();
-      setInstructores(data);
-    };
-
-    // Cargar los horarios
     const fetchHorarios = async () => {
-      const response = await fetch('/api/horarios');
-      const data: Horario[] = await response.json();
-      setHorarios(data);
+      try {
+        const response = await fetch('/api/horarios');
+        const data: Horario[] = await response.json();
+        
+        // Verificar si los datos llegan correctamente
+        console.log('Horarios con Instructor:', data);
+        setHorarios(data);
+      } catch (error) {
+        console.error('Error al cargar los horarios:', error);
+      }
     };
 
-    fetchInstructores();
     fetchHorarios();
   }, []);
 
@@ -79,9 +77,9 @@ export default function HorarioInstructor() {
             <tr key={horario.idHorario}>
               <td
                 className="cursor-pointer text-blue-500"
-                onClick={() => handleInstructorClick(horario.idInstructor)}
+                onClick={() => handleInstructorClick(horario.instructor.idInstructor)}
               >
-                {instructores.find(inst => inst.idInstructor === horario.idInstructor)?.nombre || 'Desconocido'}
+                {horario.instructor.nombreInstructor || 'Desconocido'} {/* Mostrar el nombre del instructor */}
               </td>
               <td>{horario.asignatura}</td>
               <td>{horario.nombreFicha}</td>

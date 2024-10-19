@@ -10,11 +10,14 @@ export async function GET(request: Request, { params }: { params: { idInstructor
   try {
     // Buscar los horarios de ese instructor, incluyendo los datos del instructor
     const horarios = await prisma.horario.findMany({
-      where: { idInstructor: Number(idInstructor) },  // Asegúrate de convertir el id a número
+      where: { idInstructor: Number(idInstructor) },  // Convertimos idInstructor a número
       include: {
-        instructor: true,  // Incluir los datos del instructor
+        instructor: true,  // Incluir los datos del instructor relacionados
       },
     });
+
+    // Verificar los datos que Prisma devuelve
+    console.log('Horarios con Instructor desde Prisma:', horarios);
 
     if (horarios.length === 0) {
       return NextResponse.json({ error: 'No se encontraron horarios para este instructor' }, { status: 404 });

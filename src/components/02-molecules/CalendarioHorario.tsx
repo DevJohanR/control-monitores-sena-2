@@ -2,7 +2,6 @@ import React from 'react';
 
 interface Horario {
   idHorario: number;
-  idInstructor: number;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -17,16 +16,14 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-}
-
-interface Instructor {
-  idInstructor: number;
-  nombre: string;
+  instructor: {
+    nombreInstructor: string;  // Usamos nombreInstructor para ser consistentes con el modelo
+  };
 }
 
 interface CalendarioHorarioProps {
-  horarios: (Horario & { instructor: Instructor })[]; // Relacionamos Horario con Instructor
-  tipoFiltro: string; // Tipo de filtro: "Instructor", "Ambiente" o "Ficha"
+  horarios: Horario[];
+  tipoFiltro: string;
 }
 
 const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -40,8 +37,9 @@ const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFil
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
           <p><strong>{h.asignatura}</strong></p>
-          <p>{h.instructor.nombre}</p> {/* Usamos la relación para acceder al nombre del instructor */}
-          <p>{h.horaInicio} - {h.horaFin}</p>
+          {/* Usamos nombreInstructor aquí */}
+          <p>{h.instructor?.nombreInstructor || 'Desconocido'}</p> 
+          <p>{new Date(h.horaInicio).toLocaleString()} - {new Date(h.horaFin).toLocaleString()}</p>
         </div>
       ));
   };

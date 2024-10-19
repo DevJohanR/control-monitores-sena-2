@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const horarios = await prisma.horario.findMany({
       include: {
-        instructor: true,  // Incluir los datos del instructor relacionados
+        instructor: true,  // Incluir los datos del instructor en cada horario
       },
     });
     return NextResponse.json(horarios);
@@ -76,7 +76,13 @@ export async function POST(request: Request) {
     console.log("Nuevo horario creado:", newHorario);
     return NextResponse.json(newHorario);
   } catch (error) {
-    console.error('Error detallado al crear el horario:', error); // <-- Añadir más detalles del error
-    return NextResponse.json({ error: `Error al crear el horario: ${error.message}` }, { status: 500 }); // <-- Mostrar detalles del error
+    console.error('Error detallado al crear el horario:', error);
+
+    // Usar un type guard para asegurar que error es de tipo Error
+    if (error instanceof Error) {
+      return NextResponse.json({ error: `Error al crear el horario: ${error.message}` }, { status: 500 });
+    } else {
+      return NextResponse.json({ error: 'Error desconocido al crear el horario' }, { status: 500 });
+    }
   }
 }
