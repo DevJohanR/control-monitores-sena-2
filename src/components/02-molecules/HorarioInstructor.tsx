@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Usamos el hook de enrutamiento de Next.js
 
 // Definimos la interfaz del horario
 interface Horario {
@@ -24,6 +25,7 @@ interface Horario {
 
 export default function HorarioInstructor() {
   const [horarios, setHorarios] = useState<Horario[]>([]); // Estado para almacenar los horarios
+  const router = useRouter(); // Para manejar la navegación
 
   useEffect(() => {
     const fetchHorarios = async () => {
@@ -42,6 +44,12 @@ export default function HorarioInstructor() {
     fetchHorarios();
   }, []); // Se ejecuta una vez cuando el componente se monta
 
+  // Función para manejar el clic en el nombre del instructor
+  const handleInstructorClick = (instructor: string) => {
+    // Navega a la página de calendario del instructor
+    router.push(`/calendario-instructor/${instructor}`);
+  };
+
   return (
     <div>
       <h2>Horario Instructores</h2>
@@ -58,6 +66,7 @@ export default function HorarioInstructor() {
             <th>Bloque</th>
             <th>Sede</th>
             <th>Jornada</th>
+            <th>Día de la Semana</th>
             <th>Número Trimestre</th>
             <th>Año Trimestre</th>
             <th>Hora Inicio</th>
@@ -67,7 +76,12 @@ export default function HorarioInstructor() {
         <tbody>
           {horarios.map((horario) => (
             <tr key={horario.idHorario}>
-              <td>{horario.nombreInstructor}</td>
+              <td 
+                className="cursor-pointer text-blue-500"
+                onClick={() => handleInstructorClick(horario.nombreInstructor)}
+              >
+                {horario.nombreInstructor}
+              </td>
               <td>{horario.asignatura}</td>
               <td>{horario.nombreFicha}</td>
               <td>{horario.numeroFicha}</td>
@@ -77,6 +91,7 @@ export default function HorarioInstructor() {
               <td>{horario.bloque}</td>
               <td>{horario.sede}</td>
               <td>{horario.jornada}</td>
+              <td>{horario.diaSemana}</td> 
               <td>{horario.numeroTrimestre}</td>
               <td>{horario.anoTrimestre}</td>
               <td>{new Date(horario.horaInicio).toLocaleString()}</td>

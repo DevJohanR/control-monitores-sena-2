@@ -15,7 +15,7 @@ export default function Home() {
       <FormularioHorario />
       <HorarioInstructor/>
       <h1>HORARIO FICHA</h1>
-      <HorarioFicha numeroFicha="7777" />
+      <HorarioFicha numeroFicha="6666" />
       <h1>Horarios por Ambiente</h1>
       <HorarioAmbiente nombreAmbiente="2" />
       <h1>calendario</h1>
