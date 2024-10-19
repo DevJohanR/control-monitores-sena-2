@@ -14,22 +14,32 @@ datasource db {
 
 
 
-model Horario{
-  idHorario       Int      @id @default(autoincrement())
-  nombreInstructor String 
-  asignatura String
-  nombreFicha String
-  numeroFicha String
-  tema String
-  ra String
-  nombreAmbiente String
-  bloque String
-  sede String
-  jornada String
-  diaSemana String
-  numeroTrimestre Int
-  anoTrimestre Int
-  horaInicio DateTime
-  horaFin DateTime
+model Instructor {
+  idInstructor     Int       @id @default(autoincrement())
+  nombreInstructor String    @unique
+  horarios         Horario[] // Relación uno a muchos con la tabla Horario
 }
+
+model Horario {
+  idHorario        Int       @id @default(autoincrement())
+  asignatura       String
+  nombreFicha      String
+  numeroFicha      String
+  tema             String
+  ra               String
+  nombreAmbiente   String
+  bloque           String
+  sede             String
+  jornada          String
+  diaSemana        String
+  numeroTrimestre  Int
+  anoTrimestre     Int
+  horaInicio       DateTime
+  horaFin          DateTime
+
+  // Relación con Instructor
+  idInstructor     Int
+  instructor       Instructor  @relation(fields: [idInstructor], references: [idInstructor]) // Definimos la FK
+}
+
 
