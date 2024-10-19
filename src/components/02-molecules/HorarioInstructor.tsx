@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Usamos el hook de enrutamiento de Next.js
+import { useRouter } from 'next/navigation';
 
-// Definimos la interfaz del horario
 interface Horario {
   idHorario: number;
-  nombreInstructor: string;
+  idInstructor: number; // Usamos idInstructor ahora
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -23,31 +22,37 @@ interface Horario {
   horaFin: string;
 }
 
+interface Instructor {
+  idInstructor: number;
+  nombre: string;
+}
+
 export default function HorarioInstructor() {
-  const [horarios, setHorarios] = useState<Horario[]>([]); // Estado para almacenar los horarios
-  const router = useRouter(); // Para manejar la navegación
+  const [horarios, setHorarios] = useState<Horario[]>([]);
+  const [instructores, setInstructores] = useState<Instructor[]>([]); // Estado para los instructores
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchHorarios = async () => {
-      try {
-        const response = await fetch('/api/horarios');
-        if (!response.ok) {
-          throw new Error('Error al obtener los horarios');
-        }
-        const data: Horario[] = await response.json();
-        setHorarios(data);
-      } catch (error) {
-        console.error('Error al cargar los horarios:', error);
-      }
+    // Cargar los instructores
+    const fetchInstructores = async () => {
+      const response = await fetch('/api/instructores');
+      const data: Instructor[] = await response.json();
+      setInstructores(data);
     };
 
-    fetchHorarios();
-  }, []); // Se ejecuta una vez cuando el componente se monta
+    // Cargar los horarios
+    const fetchHorarios = async () => {
+      const response = await fetch('/api/horarios');
+      const data: Horario[] = await response.json();
+      setHorarios(data);
+    };
 
-  // Función para manejar el clic en el nombre del instructor
-  const handleInstructorClick = (instructor: string) => {
-    // Navega a la página de calendario del instructor
-    router.push(`/calendario-instructor/${instructor}`);
+    fetchInstructores();
+    fetchHorarios();
+  }, []);
+
+  const handleInstructorClick = (idInstructor: number) => {
+    router.push(`/calendario-instructor/${idInstructor}`);
   };
 
   return (
@@ -61,14 +66,10 @@ export default function HorarioInstructor() {
             <th>Ficha</th>
             <th>Número Ficha</th>
             <th>Tema</th>
-            <th>Resultado de Aprendizaje (RA)</th>
             <th>Ambiente</th>
-            <th>Bloque</th>
-            <th>Sede</th>
             <th>Jornada</th>
-            <th>Día de la Semana</th>
-            <th>Número Trimestre</th>
-            <th>Año Trimestre</th>
+            <th>Día</th>
+            <th>Trimestre</th>
             <th>Hora Inicio</th>
             <th>Hora Fin</th>
           </tr>
@@ -76,24 +77,20 @@ export default function HorarioInstructor() {
         <tbody>
           {horarios.map((horario) => (
             <tr key={horario.idHorario}>
-              <td 
+              <td
                 className="cursor-pointer text-blue-500"
-                onClick={() => handleInstructorClick(horario.nombreInstructor)}
+                onClick={() => handleInstructorClick(horario.idInstructor)}
               >
-                {horario.nombreInstructor}
+                {instructores.find(inst => inst.idInstructor === horario.idInstructor)?.nombre || 'Desconocido'}
               </td>
               <td>{horario.asignatura}</td>
               <td>{horario.nombreFicha}</td>
               <td>{horario.numeroFicha}</td>
               <td>{horario.tema}</td>
-              <td>{horario.ra}</td>
               <td>{horario.nombreAmbiente}</td>
-              <td>{horario.bloque}</td>
-              <td>{horario.sede}</td>
               <td>{horario.jornada}</td>
-              <td>{horario.diaSemana}</td> 
+              <td>{horario.diaSemana}</td>
               <td>{horario.numeroTrimestre}</td>
-              <td>{horario.anoTrimestre}</td>
               <td>{new Date(horario.horaInicio).toLocaleString()}</td>
               <td>{new Date(horario.horaFin).toLocaleString()}</td>
             </tr>

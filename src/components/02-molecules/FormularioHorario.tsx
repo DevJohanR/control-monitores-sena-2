@@ -1,10 +1,15 @@
 'use client';
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 
 // Definimos la estructura de los datos del formulario
-interface HorarioFormData {
+interface Instructor {
+  idInstructor: number;
   nombreInstructor: string;
+}
+
+interface HorarioFormData {
+  idInstructor: number;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -22,8 +27,9 @@ interface HorarioFormData {
 }
 
 export default function FormularioHorario() {
+  const [instructores, setInstructores] = useState<Instructor[]>([]); // Estado para almacenar los instructores
   const [formData, setFormData] = useState<HorarioFormData>({
-    nombreInstructor: '',
+    idInstructor: 0,
     asignatura: '',
     nombreFicha: '',
     numeroFicha: '',
@@ -40,31 +46,56 @@ export default function FormularioHorario() {
     horaFin: ''
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    
+  // Cargar los instructores desde la API
+  useEffect(() => {
+    const fetchInstructores = async () => {
+      try {
+        const response = await fetch('/api/instructores');
+        if (!response.ok) {
+          throw new Error('Error al obtener los instructores');
+        }
+        const data: Instructor[] = await response.json();
+        console.log('Instructores cargados:', data); // Verificar en consola
+        setInstructores(data);
+      } catch (error) {
+        console.error('Error al cargar los instructores:', error); // Manejo del error
+      }
+    };
+
+    fetchInstructores();
+  }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [name]: name === 'numeroTrimestre' || name === 'anoTrimestre' ? parseInt(value, 10) : value,
+      [e.target.name]: e.target.value,
     });
   };
-  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Convertir idInstructor a número
+    const updatedFormData = {
+      ...formData,
+      idInstructor: parseInt(formData.idInstructor.toString(), 10), // Asegurarse de que sea un número
+    };
+
+    console.log('Datos enviados:', updatedFormData); // Verifica los datos antes de enviarlos
+
     try {
       const response = await fetch('/api/horarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData), // Enviar los datos actualizados con idInstructor como número
       });
 
       if (response.ok) {
         alert('Horario guardado exitosamente');
         setFormData({
-          nombreInstructor: '',
+          idInstructor: 0,
           asignatura: '',
           nombreFicha: '',
           numeroFicha: '',
@@ -81,7 +112,9 @@ export default function FormularioHorario() {
           horaFin: ''
         });
       } else {
-        alert('Error al guardar el horario');
+        const errorData = await response.json(); // Obtener la respuesta de error
+        console.error('Error al guardar el horario:', errorData);
+        alert(`Error al guardar el horario: ${errorData.error}`);
       }
     } catch (error) {
       console.error('Error en el envío del formulario:', error);
@@ -90,7 +123,29 @@ export default function FormularioHorario() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" name="nombreInstructor" value={formData.nombreInstructor} onChange={handleChange} placeholder="Nombre Instructor" required />
+      {/* Select para los instructores */}
+      <div>
+        <label htmlFor="idInstructor">Seleccione un Instructor</label>
+        <select
+          name="idInstructor"
+          value={formData.idInstructor}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccione un Instructor</option>
+          {instructores.length > 0 ? (
+            instructores.map((instructor) => (
+              <option key={instructor.idInstructor} value={instructor.idInstructor}>
+                {instructor.nombreInstructor} {/* Cambiado a nombreInstructor */}
+              </option>
+            ))
+          ) : (
+            <option disabled>Cargando instructores...</option>
+          )}
+        </select>
+      </div>
+
+      {/* Otros campos del formulario */}
       <input type="text" name="asignatura" value={formData.asignatura} onChange={handleChange} placeholder="Asignatura" required />
       <input type="text" name="nombreFicha" value={formData.nombreFicha} onChange={handleChange} placeholder="Nombre Ficha" required />
       <input type="text" name="numeroFicha" value={formData.numeroFicha} onChange={handleChange} placeholder="Número Ficha" required />
@@ -105,6 +160,7 @@ export default function FormularioHorario() {
       <input type="number" name="anoTrimestre" value={formData.anoTrimestre} onChange={handleChange} placeholder="Año Trimestre" required />
       <input type="datetime-local" name="horaInicio" value={formData.horaInicio} onChange={handleChange} required />
       <input type="datetime-local" name="horaFin" value={formData.horaFin} onChange={handleChange} required />
+      
       <button type="submit">Guardar Horario</button>
     </form>
   );

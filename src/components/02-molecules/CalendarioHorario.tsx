@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Horario {
   idHorario: number;
-  nombreInstructor: string;
+  idInstructor: number;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -19,8 +19,13 @@ interface Horario {
   horaFin: string;
 }
 
+interface Instructor {
+  idInstructor: number;
+  nombre: string;
+}
+
 interface CalendarioHorarioProps {
-  horarios: Horario[]; // Horarios filtrados según el tipo (Instructor, Ambiente, Ficha)
+  horarios: (Horario & { instructor: Instructor })[]; // Relacionamos Horario con Instructor
   tipoFiltro: string; // Tipo de filtro: "Instructor", "Ambiente" o "Ficha"
 }
 
@@ -35,7 +40,7 @@ const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFil
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
           <p><strong>{h.asignatura}</strong></p>
-          <p>{h.nombreInstructor}</p>
+          <p>{h.instructor.nombre}</p> {/* Usamos la relación para acceder al nombre del instructor */}
           <p>{h.horaInicio} - {h.horaFin}</p>
         </div>
       ));

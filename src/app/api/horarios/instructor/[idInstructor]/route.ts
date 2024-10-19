@@ -3,18 +3,20 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Ruta dinámica para obtener horarios por nombre del instructor
-export async function GET(request: Request, { params }: { params: { nombreInstructor: string } }) {
-  const { nombreInstructor } = params;
+// Ruta dinámica para obtener horarios por id del instructor
+export async function GET(request: Request, { params }: { params: { idInstructor: string } }) {
+  const { idInstructor } = params;
 
   try {
+    // Buscar los horarios de ese instructor, incluyendo los datos del instructor
     const horarios = await prisma.horario.findMany({
-      where: {
-        nombreInstructor: nombreInstructor,
+      where: { idInstructor: Number(idInstructor) },  // Asegúrate de convertir el id a número
+      include: {
+        instructor: true,  // Incluir los datos del instructor
       },
     });
 
-    if (!horarios.length) {
+    if (horarios.length === 0) {
       return NextResponse.json({ error: 'No se encontraron horarios para este instructor' }, { status: 404 });
     }
 

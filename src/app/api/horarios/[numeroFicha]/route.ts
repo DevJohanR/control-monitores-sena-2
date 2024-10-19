@@ -10,8 +10,9 @@ export async function GET(request: Request, { params }: { params: { numeroFicha:
 
   try {
     const ficha = await prisma.horario.findFirst({
-      where: {
-        numeroFicha: numeroFicha,
+      where: { numeroFicha: numeroFicha },
+      include: {
+        instructor: true,  // Incluir los datos del instructor
       },
     });
 

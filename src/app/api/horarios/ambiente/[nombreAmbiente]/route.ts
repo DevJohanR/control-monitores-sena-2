@@ -9,10 +9,10 @@ export async function GET(request: Request, { params }: { params: { nombreAmbien
   const { nombreAmbiente } = params;
 
   try {
-    // Buscar todos los horarios que coincidan con el nombre del ambiente
     const horarios = await prisma.horario.findMany({
-      where: {
-        nombreAmbiente: nombreAmbiente,
+      where: { nombreAmbiente: nombreAmbiente },
+      include: {
+        instructor: true,  // Incluir los datos del instructor
       },
     });
 
