@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,84 +14,22 @@ datasource db {
 
 
 
-model DiasSemana{
-  id Int @id @default(autoincrement())
-  dia String
-  horario Horario[]
-}
-
 model Horario{
-  id Int @id @default(autoincrement())
-  idInstructor Int
-  idFicha Int
-  idAmbiente Int
-  idDiaSemana Int 
-  idJornada Int
-  horarioInicio DateTime
-  horaFin DateTime  
-
-  diasSemana DiasSemana @relation(fields: [idDiaSemana], references: [id])
-
-  ambiente Ambiente @relation(fields:[idAmbiente], references: [id])
-
-  jornadas Jornadas @relation(fields: [idJornada], references: [id])
-
-  ficha Ficha @relation(fields: [idFicha], references: [id])
-
-  instructor Instructor @relation(fields: [idInstructor], references: [id])
-}
-
-model Jornadas{
-  id Int @id @default(autoincrement())
-  jornada String
-  horario Horario[]
-}
-
-model Ficha {
-  id Int @id @default(autoincrement())
-  idInstructor Int
-  tema String
-  ra String
-  ambiente String
-  bloque String
-  sede String
-  horario Horario[]
-
-  instructor Instructor @relation(fields: [idInstructor], references: [id])
-}
-
-model Instructor {
-id Int @id @default(autoincrement())
-nombre String
-asignatura String
-ficha String
-tema String
-ra String
-ambiente String
-bloque String
-sede String
-horario Horario[]
-ambienteRelacion Ambiente[]
-fichaRelation Ficha[]
-}
-
-model Ambiente{
-  id Int @id @default(autoincrement())
+  idHorario       Int      @id @default(autoincrement())
+  nombreInstructor String 
   asignatura String
-  ficha String
+  nombreFicha String
+  numeroFicha String
   tema String
   ra String
-  idInstructor Int
+  nombreAmbiente String
   bloque String
   sede String
-  horario Horario[]
-
-  instructor Instructor @relation(fields: [idInstructor], references: [id])
-
+  jornada String
+  diaSemana String
+  numeroTrimestre Int
+  anoTrimestre Int
+  horaInicio DateTime
+  horaFin DateTime
 }
 
-model Trimestre{
-  id Int @id @default(autoincrement())
-  numeroTrimestre String
-  ano String
-}
