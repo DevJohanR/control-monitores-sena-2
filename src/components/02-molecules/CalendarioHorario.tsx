@@ -26,8 +26,8 @@ interface CalendarioHorarioProps {
   tipoFiltro: string;
 }
 
-const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-const jornadas = ["Mañana", "Tarde", "Noche"];
+const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"];
+const jornadas = ["Manana", "Tarde", "Noche"];
 
 const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFiltro }) => {
   

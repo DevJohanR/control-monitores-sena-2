@@ -154,7 +154,12 @@ export default function FormularioHorario() {
       <input type="text" name="nombreAmbiente" value={formData.nombreAmbiente} onChange={handleChange} placeholder="Nombre Ambiente" required />
       <input type="text" name="bloque" value={formData.bloque} onChange={handleChange} placeholder="Bloque" required />
       <input type="text" name="sede" value={formData.sede} onChange={handleChange} placeholder="Sede" required />
-      <input type="text" name="jornada" value={formData.jornada} onChange={handleChange} placeholder="Jornada" required />
+      <select name="jornada" value={formData.jornada} onChange={handleChange} required>
+  <option value="">Seleccione una Jornada</option>
+  <option value="Manana">Mañana</option>  {/* Enviamos "Manana" a la base de datos */}
+  <option value="Tarde">Tarde</option>
+  <option value="Noche">Noche</option>
+</select>
       <input type="text" name="diaSemana" value={formData.diaSemana} onChange={handleChange} placeholder="Día de la Semana" required />
       <input type="number" name="numeroTrimestre" value={formData.numeroTrimestre} onChange={handleChange} placeholder="Número Trimestre" required />
       <input type="number" name="anoTrimestre" value={formData.anoTrimestre} onChange={handleChange} placeholder="Año Trimestre" required />
