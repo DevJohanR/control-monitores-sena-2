@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react';
 
-// Definimos la interfaz del horario
+// Definimos la interfaz del instructor y el horario
+interface Instructor {
+  idInstructor: number;
+  nombreInstructor: string;
+}
+
 interface Horario {
   idHorario: number;
-  nombreInstructor: string;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -19,6 +23,7 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
+  instructor: Instructor;  // Relación con Instructor
 }
 
 export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: string }) {
@@ -27,7 +32,7 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
-        const response = await fetch(`/api/horarios/ambiente/${nombreAmbiente}`); // Ruta dinámica para obtener horarios por ambiente
+        const response = await fetch(`/api/horarios/ambiente/${nombreAmbiente}`);
         if (!response.ok) {
           throw new Error('Error al obtener los horarios por ambiente');
         }
@@ -58,7 +63,7 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
             <th>Número Ficha</th>
             <th>Tema</th>
             <th>Resultado de Aprendizaje (RA)</th>
-            <th>Instructor</th>
+            <th>Instructor</th> {/* Aquí se mostrará el nombre del instructor */}
             <th>Bloque</th>
             <th>Sede</th>
             <th>Jornada</th>
@@ -76,7 +81,8 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
               <td>{horario.numeroFicha}</td>
               <td>{horario.tema}</td>
               <td>{horario.ra}</td>
-              <td>{horario.nombreInstructor}</td>
+              {/* Acceder correctamente al nombre del instructor */}
+              <td>{horario.instructor?.nombreInstructor || 'Instructor no disponible'}</td>
               <td>{horario.bloque}</td>
               <td>{horario.sede}</td>
               <td>{horario.jornada}</td>
