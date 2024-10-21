@@ -14,6 +14,9 @@ export async function GET() {
       distinct: ['nombreAmbiente'],  // Evitamos duplicados
     });
 
+    // Agrega este log para verificar la salida en producción
+    console.log('Ambientes obtenidos:', ambientes);
+
     // Retornamos los ambientes únicos
     return NextResponse.json(ambientes);
   } catch (error) {

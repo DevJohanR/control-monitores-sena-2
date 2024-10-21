@@ -17,10 +17,10 @@ interface Ambiente {
 }
 
 export default function Home() {
-  const [fichas, setFichas] = useState<Ficha[]>([]); // Estado para almacenar las fichas
-  const [selectedFicha, setSelectedFicha] = useState<string>(''); // Estado para la ficha seleccionada
-  const [ambientes, setAmbientes] = useState<Ambiente[]>([]); // Estado para almacenar los ambientes
-  const [selectedAmbiente, setSelectedAmbiente] = useState<string>(''); // Estado para el ambiente seleccionado
+  const [fichas, setFichas] = useState<Ficha[]>([]);
+  const [selectedFicha, setSelectedFicha] = useState<string>('');
+  const [ambientes, setAmbientes] = useState<Ambiente[]>([]);
+  const [selectedAmbiente, setSelectedAmbiente] = useState<string>('');
 
   // Cargar las fichas desde la API
   useEffect(() => {
@@ -31,9 +31,11 @@ export default function Home() {
           throw new Error('Error al obtener las fichas');
         }
         const data = await response.json();
-  
+
+        console.log('Datos de fichas recibidos:', data);
+
         if (Array.isArray(data)) {
-          setFichas(data); // Solo si es un array
+          setFichas(data);
         } else {
           throw new Error('Formato inesperado de los datos');
         }
@@ -41,7 +43,7 @@ export default function Home() {
         console.error('Error al cargar las fichas:', error);
       }
     };
-  
+
     fetchFichas();
   }, []);
 
@@ -54,6 +56,9 @@ export default function Home() {
           throw new Error('Error al obtener los ambientes');
         }
         const data: Ambiente[] = await response.json();
+
+        console.log('Datos de ambientes recibidos:', data);
+
         setAmbientes(data);
       } catch (error) {
         console.error('Error al cargar los ambientes:', error);
@@ -64,94 +69,99 @@ export default function Home() {
   }, []);
 
   const handleFichaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFicha(e.target.value); // Actualizar el estado con la ficha seleccionada
+    setSelectedFicha(e.target.value);
   };
 
   const handleAmbienteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAmbiente(e.target.value); // Actualizar el estado con el ambiente seleccionado
+    setSelectedAmbiente(e.target.value);
   };
+
+  // Verificar unicidad de claves
+  useEffect(() => {
+    const areFichasUnique = fichas.length === new Set(fichas.map(f => f.numeroFicha)).size;
+    const areAmbientesUnique = ambientes.length === new Set(ambientes.map(a => a.idAmbiente)).size;
+
+    if (!areFichasUnique) {
+      console.warn('Las claves de fichas no son únicas.');
+    }
+
+    if (!areAmbientesUnique) {
+      console.warn('Las claves de ambientes no son únicas.');
+    }
+  }, [fichas, ambientes]);
 
   return (
     <div className="flex flex-col gap-12">
       <section>
-  
         <FormularioHorario />
       </section>
 
       <section>
- 
         <HorarioInstructor />
       </section>
 
       <section className='container mx-auto my-8 px-4'>
-      
         {/* Select dinámico para elegir la ficha */}
         <div className="flex items-center space-x-4 p-2">
-  <label htmlFor="ficha" className="text-sm font-medium text-gray-700 min-w-max">
-    Seleccione una Ficha
-  </label>
-  <select
-    id="ficha"
-    value={selectedFicha}
-    onChange={handleFichaChange}
-    required
-    className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">Seleccione una Ficha</option>
-    {fichas.map((ficha) => (
-      <option key={ficha.numeroFicha} value={ficha.numeroFicha}>
-        {ficha.nombreFicha} ({ficha.numeroFicha})
-      </option>
-    ))}
-  </select>
-</div>
+          <label htmlFor="ficha" className="text-sm font-medium text-gray-700 min-w-max">
+            Seleccione una Ficha
+          </label>
+          <select
+            id="ficha"
+            value={selectedFicha}
+            onChange={handleFichaChange}
+            required
+            className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione una Ficha</option>
+            {fichas.map((ficha, index) => (
+              <option key={`${ficha.numeroFicha}-${index}`} value={ficha.numeroFicha}>
+                {ficha.nombreFicha} ({ficha.numeroFicha})
+              </option>
+            ))}
+          </select>
+        </div>
 
- 
         {/* Solo mostramos el horario si se ha seleccionado una ficha */}
         {selectedFicha ? (
-  <HorarioFicha numeroFicha={selectedFicha} />
-) : (
-  <p className="text-sm italic text-gray-500">
-    Seleccione una ficha para ver el horario
-  </p>
-)}
-
+          <HorarioFicha numeroFicha={selectedFicha} />
+        ) : (
+          <p className="text-sm italic text-gray-500">
+            Seleccione una ficha para ver el horario
+          </p>
+        )}
       </section>
 
       <section className='container mx-auto my-8 px-4'>
-      
         {/* Select dinámico para elegir el ambiente */}
         <div className="flex items-center space-x-4 p-2">
-  <label htmlFor="ambiente" className="text-sm font-medium text-gray-700 min-w-max">
-    Seleccione un Ambiente
-  </label>
-  <select
-    id="ambiente"
-    value={selectedAmbiente}
-    onChange={handleAmbienteChange}
-    required
-    className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">Seleccione un Ambiente</option>
-    {ambientes.map((ambiente) => (
-      <option key={ambiente.idAmbiente} value={ambiente.idAmbiente}>
-        {ambiente.nombreAmbiente}
-      </option>
-    ))}
-  </select>
-</div>
+          <label htmlFor="ambiente" className="text-sm font-medium text-gray-700 min-w-max">
+            Seleccione un Ambiente
+          </label>
+          <select
+            id="ambiente"
+            value={selectedAmbiente}
+            onChange={handleAmbienteChange}
+            required
+            className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione un Ambiente</option>
+            {ambientes.map((ambiente, index) => (
+              <option key={`${ambiente.idAmbiente}-${index}`} value={ambiente.idAmbiente}>
+                {ambiente.nombreAmbiente}
+              </option>
+            ))}
+          </select>
+        </div>
 
-  
-  
         {/* Solo mostramos el horario si se ha seleccionado un ambiente */}
         {selectedAmbiente ? (
-  <HorarioAmbiente nombreAmbiente={selectedAmbiente} />
-) : (
-  <p className="text-sm italic text-gray-500">
-    Seleccione un ambiente para ver el horario
-  </p>
-)}
-
+          <HorarioAmbiente nombreAmbiente={selectedAmbiente} />
+        ) : (
+          <p className="text-sm italic text-gray-500">
+            Seleccione un ambiente para ver el horario
+          </p>
+        )}
       </section>
     </div>
   );

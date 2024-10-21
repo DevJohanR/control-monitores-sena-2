@@ -14,6 +14,9 @@ export async function GET() {
       distinct: ['numeroFicha'], // Evitar duplicados
     });
 
+    // Agrega este log para verificar la salida en producción
+    console.log('Fichas obtenidas:', fichas);
+
     return NextResponse.json(fichas);
   } catch (error) {
     console.error('Error al obtener las fichas:', error);
