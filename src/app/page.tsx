@@ -30,13 +30,18 @@ export default function Home() {
         if (!response.ok) {
           throw new Error('Error al obtener las fichas');
         }
-        const data: Ficha[] = await response.json();
-        setFichas(data);
+        const data = await response.json();
+  
+        if (Array.isArray(data)) {
+          setFichas(data); // Solo si es un array
+        } else {
+          throw new Error('Formato inesperado de los datos');
+        }
       } catch (error) {
         console.error('Error al cargar las fichas:', error);
       }
     };
-
+  
     fetchFichas();
   }, []);
 

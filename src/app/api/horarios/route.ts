@@ -11,12 +11,15 @@ export async function GET() {
         instructor: true,  // Incluir los datos del instructor en cada horario
       },
     });
-    return NextResponse.json(horarios);
+
+    // Asegúrate de devolver un array vacío si no hay resultados
+    return NextResponse.json(horarios || []); 
   } catch (error) {
     console.error('Error al obtener los horarios:', error);
     return NextResponse.json({ error: 'Error al obtener los horarios' }, { status: 500 });
   }
 }
+
 
 // Método POST: Crear un nuevo horario
 export async function POST(request: Request) {

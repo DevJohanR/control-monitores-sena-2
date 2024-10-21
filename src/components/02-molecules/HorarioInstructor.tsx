@@ -28,6 +28,7 @@ interface Instructor {
 
 export default function HorarioInstructor() {
   const [horarios, setHorarios] = useState<Horario[]>([]);
+  const [loading, setLoading] = useState(true);  // Estado de carga
   const router = useRouter();
 
   // Fetch para obtener los horarios con los instructores incluidos
@@ -35,11 +36,21 @@ export default function HorarioInstructor() {
     const fetchHorarios = async () => {
       try {
         const response = await fetch('/api/horarios');
-        const data: Horario[] = await response.json();
-        console.log('Horarios con Instructor:', data);
-        setHorarios(data);
+        if (!response.ok) {
+          throw new Error('Error al obtener los horarios');
+        }
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          setHorarios(data);  // Solo si es un array
+        } else {
+          setHorarios([]);  // Valor seguro para evitar errores
+        }
       } catch (error) {
         console.error('Error al cargar los horarios:', error);
+        setHorarios([]);  // Si hay error, poner un array vacío
+      } finally {
+        setLoading(false);  // Termina la carga después del fetch
       }
     };
 
@@ -50,9 +61,14 @@ export default function HorarioInstructor() {
     router.push(`/calendario-instructor/${idInstructor}`);
   };
 
+  // Mostrar mensaje de carga mientras se obtienen los horarios
+  if (loading) {
+    return <p>Cargando horarios...</p>;
+  }
+
   return (
     <div className="container mx-auto my-8 px-4">
-    <Titulo texto="Horario Instructores" />
+      <Titulo texto="Horario Instructores" />
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead className="bg-gray-100">
