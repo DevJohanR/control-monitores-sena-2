@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react';
 
-// Definimos la interfaz del horario
+// Definimos la interfaz del instructor y el horario
+interface Instructor {
+  idInstructor: number;
+  nombreInstructor: string;
+}
+
 interface Horario {
   idHorario: number;
-  nombreInstructor: string;
   asignatura: string;
   nombreFicha: string;
   numeroFicha: string;
@@ -20,6 +24,7 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
+  instructor: Instructor;  // Relación con Instructor
 }
 
 export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
@@ -28,7 +33,7 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
   useEffect(() => {
     const fetchHorario = async () => {
       try {
-        const response = await fetch(`/api/horarios/${numeroFicha}`); // Suponemos que tienes una ruta para obtener una ficha específica
+        const response = await fetch(`/api/horarios/${numeroFicha}`);
         if (!response.ok) {
           throw new Error('Error al obtener el horario de la ficha');
         }
@@ -51,7 +56,8 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
   return (
     <div>
       <h2>Ficha: {horario.nombreFicha} ({horario.numeroFicha})</h2>
-      <p><strong>Instructor:</strong> {horario.nombreInstructor}</p>
+      {/* Asegúrate de acceder al instructor correctamente */}
+      <p><strong>Instructor:</strong> {horario.instructor?.nombreInstructor || 'Instructor no disponible'}</p>
       <p><strong>Tema:</strong> {horario.tema}</p>
       <p><strong>Resultado de Aprendizaje (RA):</strong> {horario.ra}</p>
       <p><strong>Ambiente:</strong> {horario.nombreAmbiente}</p>
