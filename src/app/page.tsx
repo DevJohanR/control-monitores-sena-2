@@ -69,51 +69,84 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-12">
       <section>
-        <h1>Gestión de Horarios</h1>
+  
         <FormularioHorario />
       </section>
 
       <section>
-        <h1>Horario Instructor</h1>
+ 
         <HorarioInstructor />
       </section>
 
-      <section>
-        <h1>Seleccionar Ficha</h1>
+      <section className='container mx-auto my-8 px-4'>
+      
         {/* Select dinámico para elegir la ficha */}
-        <select value={selectedFicha} onChange={handleFichaChange}>
-          <option value="">Seleccione una Ficha</option>
-          {fichas.map((ficha) => (
-            <option key={ficha.numeroFicha} value={ficha.numeroFicha}>
-              {ficha.nombreFicha} ({ficha.numeroFicha})
-            </option>
-          ))}
-        </select>
-      </section>
+        <div className="flex items-center space-x-4 p-2">
+  <label htmlFor="ficha" className="text-sm font-medium text-gray-700 min-w-max">
+    Seleccione una Ficha
+  </label>
+  <select
+    id="ficha"
+    value={selectedFicha}
+    onChange={handleFichaChange}
+    required
+    className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Seleccione una Ficha</option>
+    {fichas.map((ficha) => (
+      <option key={ficha.numeroFicha} value={ficha.numeroFicha}>
+        {ficha.nombreFicha} ({ficha.numeroFicha})
+      </option>
+    ))}
+  </select>
+</div>
 
-      <section>
-        <h1>HORARIO FICHA</h1>
+ 
         {/* Solo mostramos el horario si se ha seleccionado una ficha */}
-        {selectedFicha ? <HorarioFicha numeroFicha={selectedFicha} /> : <p>Seleccione una ficha para ver el horario</p>}
+        {selectedFicha ? (
+  <HorarioFicha numeroFicha={selectedFicha} />
+) : (
+  <p className="text-sm italic text-gray-500">
+    Seleccione una ficha para ver el horario
+  </p>
+)}
+
       </section>
 
-      <section>
-        <h1>Seleccionar Ambiente</h1>
+      <section className='container mx-auto my-8 px-4'>
+      
         {/* Select dinámico para elegir el ambiente */}
-        <select value={selectedAmbiente} onChange={handleAmbienteChange}>
-          <option value="">Seleccione un Ambiente</option>
-          {ambientes.map((ambiente) => (
-            <option key={ambiente.idAmbiente} value={ambiente.idAmbiente}>
-              {ambiente.nombreAmbiente}
-            </option>
-          ))}
-        </select>
-      </section>
+        <div className="flex items-center space-x-4 p-2">
+  <label htmlFor="ambiente" className="text-sm font-medium text-gray-700 min-w-max">
+    Seleccione un Ambiente
+  </label>
+  <select
+    id="ambiente"
+    value={selectedAmbiente}
+    onChange={handleAmbienteChange}
+    required
+    className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Seleccione un Ambiente</option>
+    {ambientes.map((ambiente) => (
+      <option key={ambiente.idAmbiente} value={ambiente.idAmbiente}>
+        {ambiente.nombreAmbiente}
+      </option>
+    ))}
+  </select>
+</div>
 
-      <section>
-        <h1>HORARIO AMBIENTE</h1>
+  
+  
         {/* Solo mostramos el horario si se ha seleccionado un ambiente */}
-        {selectedAmbiente ? <HorarioAmbiente nombreAmbiente={selectedAmbiente} /> : <p>Seleccione un ambiente para ver el horario</p>}
+        {selectedAmbiente ? (
+  <HorarioAmbiente nombreAmbiente={selectedAmbiente} />
+) : (
+  <p className="text-sm italic text-gray-500">
+    Seleccione un ambiente para ver el horario
+  </p>
+)}
+
       </section>
     </div>
   );

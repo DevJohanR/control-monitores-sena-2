@@ -49,51 +49,63 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
   }, [nombreAmbiente]);
 
   if (horarios.length === 0) {
-    return <div>No se encontraron horarios para este ambiente.</div>;
+    return (
+      <p className="text-sm italic text-gray-500">
+        No se encontraron horarios para este ambiente.
+      </p>
+    );
   }
 
   return (
-    <div>
-      <h2>Ambiente: {nombreAmbiente}</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Asignatura</th>
-            <th>Ficha</th>
-            <th>Número Ficha</th>
-            <th>Tema</th>
-            <th>Resultado de Aprendizaje (RA)</th>
-            <th>Instructor</th> {/* Aquí se mostrará el nombre del instructor */}
-            <th>Bloque</th>
-            <th>Sede</th>
-            <th>Jornada</th>
-            <th>Número Trimestre</th>
-            <th>Año Trimestre</th>
-            <th>Hora de Inicio</th>
-            <th>Hora de Fin</th>
-          </tr>
-        </thead>
-        <tbody>
-          {horarios.map((horario) => (
-            <tr key={horario.idHorario}>
-              <td>{horario.asignatura}</td>
-              <td>{horario.nombreFicha}</td>
-              <td>{horario.numeroFicha}</td>
-              <td>{horario.tema}</td>
-              <td>{horario.ra}</td>
-              {/* Acceder correctamente al nombre del instructor */}
-              <td>{horario.instructor?.nombreInstructor || 'Instructor no disponible'}</td>
-              <td>{horario.bloque}</td>
-              <td>{horario.sede}</td>
-              <td>{horario.jornada}</td>
-              <td>{horario.numeroTrimestre}</td>
-              <td>{horario.anoTrimestre}</td>
-              <td>{new Date(horario.horaInicio).toLocaleString()}</td>
-              <td>{new Date(horario.horaFin).toLocaleString()}</td>
+    <div className="container mx-auto my-8 px-4">
+      <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
+        Ambiente: {nombreAmbiente}
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 text-left font-semibold">Asignatura</th>
+              <th className="p-3 text-left font-semibold">Ficha</th>
+              <th className="p-3 text-left font-semibold">Número Ficha</th>
+              <th className="p-3 text-left font-semibold">Tema</th>
+              <th className="p-3 text-left font-semibold">RA</th>
+              <th className="p-3 text-left font-semibold">Instructor</th>
+              <th className="p-3 text-left font-semibold">Bloque</th>
+              <th className="p-3 text-left font-semibold">Sede</th>
+              <th className="p-3 text-left font-semibold">Jornada</th>
+              <th className="p-3 text-left font-semibold">Trimestre</th>
+              <th className="p-3 text-left font-semibold">Año</th>
+              <th className="p-3 text-left font-semibold">Hora Inicio</th>
+              <th className="p-3 text-left font-semibold">Hora Fin</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {horarios.map((horario) => (
+              <tr
+                key={horario.idHorario}
+                className="border-t bg-white hover:bg-blue-50"
+              >
+                <td className="p-3">{horario.asignatura}</td>
+                <td className="p-3">{horario.nombreFicha}</td>
+                <td className="p-3">{horario.numeroFicha}</td>
+                <td className="p-3">{horario.tema}</td>
+                <td className="p-3">{horario.ra}</td>
+                <td className="p-3">
+                  {horario.instructor?.nombreInstructor || 'Instructor no disponible'}
+                </td>
+                <td className="p-3">{horario.bloque}</td>
+                <td className="p-3">{horario.sede}</td>
+                <td className="p-3">{horario.jornada}</td>
+                <td className="p-3">{horario.numeroTrimestre}</td>
+                <td className="p-3">{horario.anoTrimestre}</td>
+                <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
+                <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

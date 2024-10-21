@@ -54,20 +54,46 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
   }
 
   return (
-    <div>
-      <h2>Ficha: {horario.nombreFicha} ({horario.numeroFicha})</h2>
-      {/* Asegúrate de acceder al instructor correctamente */}
-      <p><strong>Instructor:</strong> {horario.instructor?.nombreInstructor || 'Instructor no disponible'}</p>
-      <p><strong>Tema:</strong> {horario.tema}</p>
-      <p><strong>Resultado de Aprendizaje (RA):</strong> {horario.ra}</p>
-      <p><strong>Ambiente:</strong> {horario.nombreAmbiente}</p>
-      <p><strong>Bloque:</strong> {horario.bloque}</p>
-      <p><strong>Sede:</strong> {horario.sede}</p>
-      <p><strong>Jornada:</strong> {horario.jornada}</p>
-      <p><strong>Número Trimestre:</strong> {horario.numeroTrimestre}</p>
-      <p><strong>Año Trimestre:</strong> {horario.anoTrimestre}</p>
-      <p><strong>Hora de Inicio:</strong> {new Date(horario.horaInicio).toLocaleString()}</p>
-      <p><strong>Hora de Fin:</strong> {new Date(horario.horaFin).toLocaleString()}</p>
+    <div className="container mx-auto my-8 px-4">
+      <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
+        Ficha: {horario.nombreFicha} ({horario.numeroFicha})
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 text-left font-semibold">Instructor</th>
+              <th className="p-3 text-left font-semibold">Asignatura</th>
+              <th className="p-3 text-left font-semibold">Tema</th>
+              <th className="p-3 text-left font-semibold">RA</th>
+              <th className="p-3 text-left font-semibold">Ambiente</th>
+              <th className="p-3 text-left font-semibold">Bloque</th>
+              <th className="p-3 text-left font-semibold">Sede</th>
+              <th className="p-3 text-left font-semibold">Jornada</th>
+              <th className="p-3 text-left font-semibold">Día</th>
+              <th className="p-3 text-left font-semibold">Trimestre</th>
+              <th className="p-3 text-left font-semibold">Hora Inicio</th>
+              <th className="p-3 text-left font-semibold">Hora Fin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-t bg-white hover:bg-blue-50">
+              <td className="p-3">{horario.instructor?.nombreInstructor || 'Instructor no disponible'}</td>
+              <td className="p-3">{horario.asignatura}</td>
+              <td className="p-3">{horario.tema}</td>
+              <td className="p-3">{horario.ra}</td>
+              <td className="p-3">{horario.nombreAmbiente}</td>
+              <td className="p-3">{horario.bloque}</td>
+              <td className="p-3">{horario.sede}</td>
+              <td className="p-3">{horario.jornada}</td>
+              <td className="p-3">{horario.diaSemana}</td>
+              <td className="p-3">{horario.numeroTrimestre}</td>
+              <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
+              <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

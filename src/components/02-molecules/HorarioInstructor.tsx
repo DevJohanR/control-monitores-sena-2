@@ -1,7 +1,6 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Titulo from '../01-atoms/Titulo';
 
 interface Horario {
   idHorario: number;
@@ -19,12 +18,12 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-  instructor: Instructor;  // El instructor ya viene incluido
+  instructor: Instructor;
 }
 
 interface Instructor {
   idInstructor: number;
-  nombreInstructor: string;  // El nombre del instructor que cargaremos desde la API
+  nombreInstructor: string;
 }
 
 export default function HorarioInstructor() {
@@ -37,8 +36,6 @@ export default function HorarioInstructor() {
       try {
         const response = await fetch('/api/horarios');
         const data: Horario[] = await response.json();
-        
-        // Verificar si los datos llegan correctamente
         console.log('Horarios con Instructor:', data);
         setHorarios(data);
       } catch (error) {
@@ -54,47 +51,52 @@ export default function HorarioInstructor() {
   };
 
   return (
-    <div>
-      <h2>Horario Instructores</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Instructor</th>
-            <th>Asignatura</th>
-            <th>Ficha</th>
-            <th>Número Ficha</th>
-            <th>Tema</th>
-            <th>Ambiente</th>
-            <th>Jornada</th>
-            <th>Día</th>
-            <th>Trimestre</th>
-            <th>Hora Inicio</th>
-            <th>Hora Fin</th>
-          </tr>
-        </thead>
-        <tbody>
-          {horarios.map((horario) => (
-            <tr key={horario.idHorario}>
-              <td
-                className="cursor-pointer text-blue-500"
-                onClick={() => handleInstructorClick(horario.instructor.idInstructor)}
-              >
-                {horario.instructor.nombreInstructor || 'Desconocido'} {/* Mostrar el nombre del instructor */}
-              </td>
-              <td>{horario.asignatura}</td>
-              <td>{horario.nombreFicha}</td>
-              <td>{horario.numeroFicha}</td>
-              <td>{horario.tema}</td>
-              <td>{horario.nombreAmbiente}</td>
-              <td>{horario.jornada}</td>
-              <td>{horario.diaSemana}</td>
-              <td>{horario.numeroTrimestre}</td>
-              <td>{new Date(horario.horaInicio).toLocaleString()}</td>
-              <td>{new Date(horario.horaFin).toLocaleString()}</td>
+    <div className="container mx-auto my-8 px-4">
+    <Titulo texto="Horario Instructores" />
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 text-left font-semibold">Instructor</th>
+              <th className="p-3 text-left font-semibold">Asignatura</th>
+              <th className="p-3 text-left font-semibold">Ficha</th>
+              <th className="p-3 text-left font-semibold">Número Ficha</th>
+              <th className="p-3 text-left font-semibold">Tema</th>
+              <th className="p-3 text-left font-semibold">Ambiente</th>
+              <th className="p-3 text-left font-semibold">Jornada</th>
+              <th className="p-3 text-left font-semibold">Día</th>
+              <th className="p-3 text-left font-semibold">Trimestre</th>
+              <th className="p-3 text-left font-semibold">Hora Inicio</th>
+              <th className="p-3 text-left font-semibold">Hora Fin</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {horarios.map((horario, index) => (
+              <tr
+                key={horario.idHorario}
+                className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50`}
+              >
+                <td
+                  className="p-3 cursor-pointer text-blue-500 hover:underline"
+                  onClick={() => handleInstructorClick(horario.instructor.idInstructor)}
+                >
+                  {horario.instructor.nombreInstructor || 'Desconocido'}
+                </td>
+                <td className="p-3">{horario.asignatura}</td>
+                <td className="p-3">{horario.nombreFicha}</td>
+                <td className="p-3">{horario.numeroFicha}</td>
+                <td className="p-3">{horario.tema}</td>
+                <td className="p-3">{horario.nombreAmbiente}</td>
+                <td className="p-3">{horario.jornada}</td>
+                <td className="p-3">{horario.diaSemana}</td>
+                <td className="p-3">{horario.numeroTrimestre}</td>
+                <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
+                <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

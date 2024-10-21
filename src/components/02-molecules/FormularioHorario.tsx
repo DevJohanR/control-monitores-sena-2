@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Titulo from '../01-atoms/Titulo';
 
 // Definimos la estructura de los datos del formulario
 interface Instructor {
@@ -122,51 +123,181 @@ export default function FormularioHorario() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='container mx-auto my-8 px-4' onSubmit={handleSubmit}>
+       <Titulo texto="Crear Horarios" />
       {/* Select para los instructores */}
-      <div>
-        <label htmlFor="idInstructor">Seleccione un Instructor</label>
-        <select
-          name="idInstructor"
-          value={formData.idInstructor}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccione un Instructor</option>
-          {instructores.length > 0 ? (
-            instructores.map((instructor) => (
-              <option key={instructor.idInstructor} value={instructor.idInstructor}>
-                {instructor.nombreInstructor} {/* Cambiado a nombreInstructor */}
-              </option>
-            ))
-          ) : (
-            <option disabled>Cargando instructores...</option>
-          )}
-        </select>
-      </div>
+      <div className="flex items-center space-x-4 p-2">
+  <label htmlFor="idInstructor" className="text-sm font-medium text-gray-700 min-w-max">Seleccione un Instructor</label>
+  <select
+    name="idInstructor"
+    value={formData.idInstructor}
+    onChange={handleChange}
+    required
+    className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">Seleccione un Instructor</option>
+    {instructores.length > 0 ? (
+      instructores.map((instructor) => (
+        <option key={instructor.idInstructor} value={instructor.idInstructor}>
+          {instructor.nombreInstructor}
+        </option>
+      ))
+    ) : (
+      <option disabled>Cargando instructores...</option>
+    )}
+  </select>
+</div>
+
 
       {/* Otros campos del formulario */}
-      <input type="text" name="asignatura" value={formData.asignatura} onChange={handleChange} placeholder="Asignatura" required />
-      <input type="text" name="nombreFicha" value={formData.nombreFicha} onChange={handleChange} placeholder="Nombre Ficha" required />
-      <input type="text" name="numeroFicha" value={formData.numeroFicha} onChange={handleChange} placeholder="Número Ficha" required />
-      <input type="text" name="tema" value={formData.tema} onChange={handleChange} placeholder="Tema" required />
-      <input type="text" name="ra" value={formData.ra} onChange={handleChange} placeholder="Resultado de Aprendizaje" required />
-      <input type="text" name="nombreAmbiente" value={formData.nombreAmbiente} onChange={handleChange} placeholder="Nombre Ambiente" required />
-      <input type="text" name="bloque" value={formData.bloque} onChange={handleChange} placeholder="Bloque" required />
-      <input type="text" name="sede" value={formData.sede} onChange={handleChange} placeholder="Sede" required />
-      <select name="jornada" value={formData.jornada} onChange={handleChange} required>
+      <input
+  type="text"
+  name="asignatura"
+  value={formData.asignatura}
+  onChange={handleChange}
+  placeholder="Asignatura"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="nombreFicha"
+  value={formData.nombreFicha}
+  onChange={handleChange}
+  placeholder="Nombre Ficha"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="numeroFicha"
+  value={formData.numeroFicha}
+  onChange={handleChange}
+  placeholder="Número Ficha"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="tema"
+  value={formData.tema}
+  onChange={handleChange}
+  placeholder="Tema"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="ra"
+  value={formData.ra}
+  onChange={handleChange}
+  placeholder="Resultado de Aprendizaje"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="nombreAmbiente"
+  value={formData.nombreAmbiente}
+  onChange={handleChange}
+  placeholder="Nombre Ambiente"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="bloque"
+  value={formData.bloque}
+  onChange={handleChange}
+  placeholder="Bloque"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="text"
+  name="sede"
+  value={formData.sede}
+  onChange={handleChange}
+  placeholder="Sede"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+     <select
+  name="jornada"
+  value={formData.jornada}
+  onChange={handleChange}
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
   <option value="">Seleccione una Jornada</option>
   <option value="Manana">Mañana</option>  {/* Enviamos "Manana" a la base de datos */}
   <option value="Tarde">Tarde</option>
   <option value="Noche">Noche</option>
 </select>
-      <input type="text" name="diaSemana" value={formData.diaSemana} onChange={handleChange} placeholder="Día de la Semana" required />
-      <input type="number" name="numeroTrimestre" value={formData.numeroTrimestre} onChange={handleChange} placeholder="Número Trimestre" required />
-      <input type="number" name="anoTrimestre" value={formData.anoTrimestre} onChange={handleChange} placeholder="Año Trimestre" required />
-      <input type="datetime-local" name="horaInicio" value={formData.horaInicio} onChange={handleChange} required />
-      <input type="datetime-local" name="horaFin" value={formData.horaFin} onChange={handleChange} required />
-      
-      <button type="submit">Guardar Horario</button>
+
+<input
+  type="text"
+  name="diaSemana"
+  value={formData.diaSemana}
+  onChange={handleChange}
+  placeholder="Día de la Semana"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="number"
+  name="numeroTrimestre"
+  value={formData.numeroTrimestre}
+  onChange={handleChange}
+  placeholder="Número Trimestre"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="number"
+  name="anoTrimestre"
+  value={formData.anoTrimestre}
+  onChange={handleChange}
+  placeholder="Año Trimestre"
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="datetime-local"
+  name="horaInicio"
+  value={formData.horaInicio}
+  onChange={handleChange}
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<input
+  type="datetime-local"
+  name="horaFin"
+  value={formData.horaFin}
+  onChange={handleChange}
+  required
+  className="p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
+
+<button
+  type="submit"
+  className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
+>
+  Guardar Horario
+</button>
+
     </form>
   );
 }
