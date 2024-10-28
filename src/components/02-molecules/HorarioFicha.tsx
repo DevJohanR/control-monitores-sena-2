@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
+
 // Definimos la interfaz del instructor y el horario
 interface Instructor {
   idInstructor: number;
@@ -57,6 +58,7 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
       <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
         Ficha: {horarios[0]?.nombrePrograma} ({horarios[0]?.numeroFicha})
       </h2>
+   
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead className="bg-gray-100">

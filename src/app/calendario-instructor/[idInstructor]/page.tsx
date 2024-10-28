@@ -6,10 +6,9 @@ import CalendarioHorario from '@/components/02-molecules/CalendarioHorario';
 
 interface Horario {
   idHorario: number;
-  idInstructor: number;
-  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
+  nombrePrograma: string;
   numeroFicha: string;
-  competencia: string;  // Cambiado de tema a competencia
+  competencia: string;
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -21,21 +20,20 @@ interface Horario {
   horaInicio: string;
   horaFin: string;
   instructor: {
-    nombreInstructor: string;  // Asegurarse de que usa el campo correcto para el nombre del instructor
+    nombreInstructor: string;
   };
 }
 
 interface Instructor {
   idInstructor: number;
-  nombreInstructor: string;  // Cambiado a nombreInstructor para mantener la consistencia
+  nombreInstructor: string;
 }
 
 export default function CalendarioInstructor() {
-  const { idInstructor } = useParams(); // Utilizamos idInstructor en la URL
+  const { idInstructor } = useParams();
   const [horarios, setHorarios] = useState<Horario[]>([]);
-  const [instructor, setInstructor] = useState<Instructor | null>(null); // Estado para almacenar los datos del instructor
+  const [instructor, setInstructor] = useState<Instructor | null>(null);
 
-  // Fetch para obtener los horarios del instructor
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
@@ -45,7 +43,7 @@ export default function CalendarioInstructor() {
         }
         const data: Horario[] = await response.json();
         
-        // Log para verificar los datos que llegan del backend
+        // Verifica en la consola los horarios obtenidos
         console.log('Horarios con Instructor:', data);
 
         setHorarios(data);
@@ -62,7 +60,7 @@ export default function CalendarioInstructor() {
         }
         const instructorData: Instructor = await response.json();
 
-        // Log para verificar los datos del instructor
+        // Verifica en la consola los datos del instructor
         console.log('Datos del Instructor:', instructorData);
 
         setInstructor(instructorData);
@@ -73,7 +71,7 @@ export default function CalendarioInstructor() {
 
     fetchHorarios();
     fetchInstructor();
-  }, [idInstructor]); // Volver a ejecutar cuando cambie el idInstructor
+  }, [idInstructor]);
 
   return (
     <div>

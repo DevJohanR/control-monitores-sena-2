@@ -2,9 +2,9 @@ import React from 'react';
 
 interface Horario {
   idHorario: number;
-  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
+  nombrePrograma: string;
   numeroFicha: string;
-  competencia: string;  // Cambiado de tema a competencia
+  competencia: string;
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -15,9 +15,9 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-  instructor: {
-    nombreInstructor: string;  // Usamos nombreInstructor para ser consistentes con el modelo
-  };
+  /*instructor: {
+    nombreInstructor: string;
+  };*/
 }
 
 interface CalendarioHorarioProps {
@@ -35,10 +35,13 @@ const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFil
       .filter((h) => h.diaSemana === dia && h.jornada === jornada)
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
-          <p><strong>{h.competencia}</strong></p> {/* Cambiado de tema a competencia */}
-          {/* Usamos nombreInstructor aquí */}
-          <p>{h.instructor?.nombreInstructor || 'Desconocido'}</p> 
-          <p>{new Date(h.horaInicio).toLocaleString()} - {new Date(h.horaFin).toLocaleString()}</p>
+          <p><strong>{h.nombrePrograma}</strong></p>
+          <p>{h.numeroFicha}</p>
+          <p>{h.competencia}</p>
+          <p>{h.ra}</p>
+          {/*<p>{h.instructor?.nombreInstructor || 'Desconocido'}</p>*/}
+          <p>{`Bloque: ${h.bloque}, Ambiente: ${h.nombreAmbiente}, Sede: ${h.sede}`}</p>
+          <p>{`Hora: ${new Date(h.horaInicio).toLocaleString()} - ${new Date(h.horaFin).toLocaleString()}`}</p>
         </div>
       ));
   };
