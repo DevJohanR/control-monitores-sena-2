@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { AiOutlineCalendar } from 'react-icons/ai'; // Importamos el ícono de calendario
 
-
-// Definimos la interfaz del instructor y el horario
 interface Instructor {
   idInstructor: number;
   nombreInstructor: string;
@@ -11,9 +11,9 @@ interface Instructor {
 
 interface Horario {
   idHorario: number;
-  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
+  nombrePrograma: string;
   numeroFicha: string;
-  competencia: string;  // Cambiado de tema a competencia
+  competencia: string;
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -24,11 +24,12 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-  instructor: Instructor | null;  // Relación con Instructor, permitimos que pueda ser null
+  instructor: Instructor | null;
 }
 
 export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
-  const [horarios, setHorarios] = useState<Horario[]>([]); // Estado para almacenar los horarios de una ficha específica
+  const [horarios, setHorarios] = useState<Horario[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchHorarios = async () => {
@@ -38,7 +39,7 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
           throw new Error('Error al obtener los horarios de la ficha');
         }
         const data: Horario[] = await response.json();
-        setHorarios(data); // Guardamos los horarios como un array
+        setHorarios(data);
       } catch (error) {
         console.error('Error al cargar los horarios:', error);
       }
@@ -49,6 +50,10 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
     }
   }, [numeroFicha]);
 
+  const handleNavigation = () => {
+    router.push(`/calendario-ficha/${numeroFicha}`);
+  };
+
   if (horarios.length === 0) {
     return <div>Cargando información de la ficha...</div>;
   }
@@ -58,7 +63,7 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
       <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
         Ficha: {horarios[0]?.nombrePrograma} ({horarios[0]?.numeroFicha})
       </h2>
-   
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead className="bg-gray-100">
@@ -74,12 +79,13 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
               <th className="p-3 text-left font-semibold">Trimestre</th>
               <th className="p-3 text-left font-semibold">Hora Inicio</th>
               <th className="p-3 text-left font-semibold">Hora Fin</th>
+              <th className="p-3 text-left font-semibold">Calendario</th> {/* Nueva columna para el ícono */}
             </tr>
           </thead>
           <tbody>
             {horarios.map((horario) => (
               <tr
-                key={`${horario.idHorario}-${horario.instructor?.idInstructor ?? 'sin-instructor'}`} // Combinación única de idHorario e idInstructor
+                key={`${horario.idHorario}-${horario.instructor?.idInstructor ?? 'sin-instructor'}`}
                 className="border-t bg-white hover:bg-blue-50"
               >
                 <td className="p-3">{horario.instructor?.nombreInstructor || 'Instructor no disponible'}</td>
@@ -93,6 +99,14 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
                 <td className="p-3">{horario.numeroTrimestre}</td>
                 <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
                 <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+                <td className="p-3 text-center">
+                  <AiOutlineCalendar
+                    className="text-blue-500 cursor-pointer"
+                    size={24}
+                    onClick={handleNavigation}
+                    title="Ver calendario"
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
