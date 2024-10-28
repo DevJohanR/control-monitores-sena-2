@@ -7,10 +7,9 @@ import CalendarioHorario from '@/components/02-molecules/CalendarioHorario';
 interface Horario {
   idHorario: number;
   idInstructor: number;
-  asignatura: string;
-  nombreFicha: string;
+  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
   numeroFicha: string;
-  tema: string;
+  competencia: string;  // Cambiado de tema a competencia
   ra: string;
   nombreAmbiente: string;
   bloque: string;

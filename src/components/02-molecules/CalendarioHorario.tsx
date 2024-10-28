@@ -2,10 +2,9 @@ import React from 'react';
 
 interface Horario {
   idHorario: number;
-  asignatura: string;
-  nombreFicha: string;
+  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
   numeroFicha: string;
-  tema: string;
+  competencia: string;  // Cambiado de tema a competencia
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -36,7 +35,7 @@ const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFil
       .filter((h) => h.diaSemana === dia && h.jornada === jornada)
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
-          <p><strong>{h.asignatura}</strong></p>
+          <p><strong>{h.competencia}</strong></p> {/* Cambiado de tema a competencia */}
           {/* Usamos nombreInstructor aquí */}
           <p>{h.instructor?.nombreInstructor || 'Desconocido'}</p> 
           <p>{new Date(h.horaInicio).toLocaleString()} - {new Date(h.horaFin).toLocaleString()}</p>

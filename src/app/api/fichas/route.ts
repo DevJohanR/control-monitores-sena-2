@@ -9,7 +9,7 @@ export async function GET() {
     const fichas = await prisma.horario.findMany({
       select: {
         numeroFicha: true,
-        nombreFicha: true,
+        nombrePrograma: true,
       },
       distinct: ['numeroFicha'], // Evitar duplicados
     });

@@ -10,10 +10,9 @@ interface Instructor {
 
 interface Horario {
   idHorario: number;
-  asignatura: string;
-  nombreFicha: string;
+  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
   numeroFicha: string;
-  tema: string;
+  competencia: string;  // Cambiado de tema a competencia
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -65,10 +64,9 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
         <table className="min-w-full bg-white border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="p-3 text-left font-semibold">Asignatura</th>
-              <th className="p-3 text-left font-semibold">Ficha</th>
+              <th className="p-3 text-left font-semibold">Programa</th>
               <th className="p-3 text-left font-semibold">Número Ficha</th>
-              <th className="p-3 text-left font-semibold">Tema</th>
+              <th className="p-3 text-left font-semibold">Competencia</th>
               <th className="p-3 text-left font-semibold">RA</th>
               <th className="p-3 text-left font-semibold">Instructor</th>
               <th className="p-3 text-left font-semibold">Bloque</th>
@@ -83,13 +81,13 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
           <tbody>
             {horarios.map((horario) => (
               <tr
-                key={horario.idHorario}
+              key={`${horario.idHorario}-${horario.instructor?.idInstructor ?? 'sin-instructor'}`}
+              // Combinación única de idHorario e idInstructor
                 className="border-t bg-white hover:bg-blue-50"
               >
-                <td className="p-3">{horario.asignatura}</td>
-                <td className="p-3">{horario.nombreFicha}</td>
+                <td className="p-3">{horario.nombrePrograma}</td> {/* Cambiado de nombreFicha a nombrePrograma */}
                 <td className="p-3">{horario.numeroFicha}</td>
-                <td className="p-3">{horario.tema}</td>
+                <td className="p-3">{horario.competencia}</td> {/* Cambiado de tema a competencia */}
                 <td className="p-3">{horario.ra}</td>
                 <td className="p-3">
                   {horario.instructor?.nombreInstructor || 'Instructor no disponible'}

@@ -9,18 +9,19 @@ export async function GET(request: Request, { params }: { params: { numeroFicha:
   const { numeroFicha } = params;
 
   try {
-    const ficha = await prisma.horario.findFirst({
+    // Buscar todos los horarios para esa ficha
+    const horarios = await prisma.horario.findMany({
       where: { numeroFicha: numeroFicha },
       include: {
-        instructor: true,  // Incluir los datos del instructor
+        instructor: true,  // Incluir los datos del instructor en cada horario
       },
     });
 
-    if (!ficha) {
-      return NextResponse.json({ error: 'Ficha no encontrada' }, { status: 404 });
+    if (horarios.length === 0) {
+      return NextResponse.json({ error: 'No se encontraron horarios para esta ficha' }, { status: 404 });
     }
 
-    return NextResponse.json(ficha);
+    return NextResponse.json(horarios); // Devolvemos un arreglo de horarios
   } catch (error) {
     console.error('Error al obtener la ficha:', error);
     return NextResponse.json({ error: 'Error al obtener la ficha' }, { status: 500 });

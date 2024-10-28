@@ -29,10 +29,10 @@ export async function POST(request: Request) {
 
     const {
       idInstructor,
-      asignatura,
-      nombreFicha,
+   
+      nombrePrograma,
       numeroFicha,
-      tema,
+      competencia,
       ra,
       nombreAmbiente,
       bloque,
@@ -51,17 +51,16 @@ export async function POST(request: Request) {
     }
 
     // Validar los campos requeridos
-    if (!asignatura || !nombreFicha || !numeroFicha || !tema || !ra || !nombreAmbiente || !bloque || !sede || !jornada || !diaSemana || !numeroTrimestre || !anoTrimestre || !horaInicio || !horaFin) {
+    if (!nombrePrograma || !numeroFicha || !competencia || !ra || !nombreAmbiente || !bloque || !sede || !jornada || !diaSemana || !numeroTrimestre || !anoTrimestre || !horaInicio || !horaFin) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
     // Crear el nuevo horario usando el idInstructor
     const newHorario = await prisma.horario.create({
       data: {
-        asignatura,
-        nombreFicha,
+        nombrePrograma,
         numeroFicha,
-        tema,
+        competencia,
         ra,
         nombreAmbiente,
         bloque,

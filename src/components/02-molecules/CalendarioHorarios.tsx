@@ -3,7 +3,7 @@ import React from 'react';
 interface Horario {
   diaSemana: string;
   jornada: string;
-  asignatura: string;
+  competencia: string; // Cambiado de asignatura a competencia
   nombreInstructor: string;
   horaInicio: string;
   horaFin: string;
@@ -16,7 +16,7 @@ const horarios: Horario[] = [
   {
     diaSemana: "Lunes",
     jornada: "Mañana",
-    asignatura: "Matemáticas",
+    competencia: "Matemáticas", // Cambiado de asignatura a competencia
     nombreInstructor: "Johan Riascos",
     horaInicio: "08:00",
     horaFin: "12:00",
@@ -24,7 +24,7 @@ const horarios: Horario[] = [
   {
     diaSemana: "Martes",
     jornada: "Tarde",
-    asignatura: "Ciencia de Datos",
+    competencia: "Ciencia de Datos", // Cambiado de asignatura a competencia
     nombreInstructor: "Ana Pérez",
     horaInicio: "14:00",
     horaFin: "18:00",
@@ -38,7 +38,7 @@ export default function CalendarioHorarios() {
       .filter((h) => h.diaSemana === dia && h.jornada === jornada)
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
-          <p><strong>{h.asignatura}</strong></p>
+          <p><strong>{h.competencia}</strong></p> {/* Cambiado de asignatura a competencia */}
           <p>{h.nombreInstructor}</p>
           <p>{h.horaInicio} - {h.horaFin}</p>
         </div>

@@ -22,10 +22,10 @@ model Instructor {
 
 model Horario {
   idHorario        Int       @id @default(autoincrement())
-  asignatura       String
-  nombreFicha      String
+
+  nombrePrograma      String
   numeroFicha      String
-  tema             String
+  competencia             String
   ra               String
   nombreAmbiente   String
   bloque           String

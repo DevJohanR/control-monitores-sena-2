@@ -4,11 +4,10 @@ import Titulo from '../01-atoms/Titulo';
 
 interface Horario {
   idHorario: number;
-  asignatura: string;
-  nombreFicha: string;
+  nombrePrograma: string;
   numeroFicha: string;
-  tema: string;
-  ra: string;
+  competencia: string;
+  ra: string;  // Incluimos la propiedad de "RA"
   nombreAmbiente: string;
   bloque: string;
   sede: string;
@@ -28,10 +27,9 @@ interface Instructor {
 
 export default function HorarioInstructor() {
   const [horarios, setHorarios] = useState<Horario[]>([]);
-  const [loading, setLoading] = useState(true);  // Estado de carga
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Fetch para obtener los horarios con los instructores incluidos
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
@@ -42,15 +40,15 @@ export default function HorarioInstructor() {
         const data = await response.json();
         
         if (Array.isArray(data)) {
-          setHorarios(data);  // Solo si es un array
+          setHorarios(data);
         } else {
-          setHorarios([]);  // Valor seguro para evitar errores
+          setHorarios([]);
         }
       } catch (error) {
         console.error('Error al cargar los horarios:', error);
-        setHorarios([]);  // Si hay error, poner un array vacío
+        setHorarios([]);
       } finally {
-        setLoading(false);  // Termina la carga después del fetch
+        setLoading(false);
       }
     };
 
@@ -61,7 +59,6 @@ export default function HorarioInstructor() {
     router.push(`/calendario-instructor/${idInstructor}`);
   };
 
-  // Mostrar mensaje de carga mientras se obtienen los horarios
   if (loading) {
     return <p>Cargando horarios...</p>;
   }
@@ -74,10 +71,10 @@ export default function HorarioInstructor() {
           <thead className="bg-gray-100">
             <tr>
               <th className="p-3 text-left font-semibold">Instructor</th>
-              <th className="p-3 text-left font-semibold">Asignatura</th>
-              <th className="p-3 text-left font-semibold">Ficha</th>
+              <th className="p-3 text-left font-semibold">Programa</th>
               <th className="p-3 text-left font-semibold">Número Ficha</th>
-              <th className="p-3 text-left font-semibold">Tema</th>
+              <th className="p-3 text-left font-semibold">Competencia</th>
+              <th className="p-3 text-left font-semibold">RA</th> {/* Nueva columna para RA */}
               <th className="p-3 text-left font-semibold">Ambiente</th>
               <th className="p-3 text-left font-semibold">Jornada</th>
               <th className="p-3 text-left font-semibold">Día</th>
@@ -98,10 +95,10 @@ export default function HorarioInstructor() {
                 >
                   {horario.instructor.nombreInstructor || 'Desconocido'}
                 </td>
-                <td className="p-3">{horario.asignatura}</td>
-                <td className="p-3">{horario.nombreFicha}</td>
+                <td className="p-3">{horario.nombrePrograma}</td>
                 <td className="p-3">{horario.numeroFicha}</td>
-                <td className="p-3">{horario.tema}</td>
+                <td className="p-3">{horario.competencia}</td>
+                <td className="p-3">{horario.ra}</td> {/* Mostrar los RA */}
                 <td className="p-3">{horario.nombreAmbiente}</td>
                 <td className="p-3">{horario.jornada}</td>
                 <td className="p-3">{horario.diaSemana}</td>
