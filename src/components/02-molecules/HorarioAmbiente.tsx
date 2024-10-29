@@ -1,6 +1,9 @@
-'use client';
+// app/calendario-ambiente/[nombreAmbiente]/HorarioAmbiente.tsx
+"use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Importamos useRouter para redirección
+import { AiOutlineCalendar } from 'react-icons/ai'; // Importamos el ícono de calendario
 
 // Definimos la interfaz del instructor y el horario
 interface Instructor {
@@ -10,9 +13,9 @@ interface Instructor {
 
 interface Horario {
   idHorario: number;
-  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
+  nombrePrograma: string;
   numeroFicha: string;
-  competencia: string;  // Cambiado de tema a competencia
+  competencia: string;
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -22,11 +25,12 @@ interface Horario {
   anoTrimestre: number;
   horaInicio: string;
   horaFin: string;
-  instructor: Instructor;  // Relación con Instructor
+  instructor: Instructor;
 }
 
 export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: string }) {
   const [horarios, setHorarios] = useState<Horario[]>([]); // Estado para almacenar los horarios por ambiente
+  const router = useRouter(); // Usamos useRouter para la navegación
 
   useEffect(() => {
     const fetchHorarios = async () => {
@@ -46,6 +50,10 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
       fetchHorarios();
     }
   }, [nombreAmbiente]);
+
+  const handleCalendarClick = () => {
+    router.push(`/calendario-ambiente/${nombreAmbiente}`);
+  };
 
   if (horarios.length === 0) {
     return (
@@ -76,13 +84,13 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
               <th className="p-3 text-left font-semibold">Año</th>
               <th className="p-3 text-left font-semibold">Hora Inicio</th>
               <th className="p-3 text-left font-semibold">Hora Fin</th>
+              <th className="p-3 text-center font-semibold">Calendario</th> {/* Nueva columna para el ícono */}
             </tr>
           </thead>
           <tbody>
             {horarios.map((horario) => (
               <tr
-              key={`${horario.idHorario}-${horario.instructor?.idInstructor ?? 'sin-instructor'}`}
-              // Combinación única de idHorario e idInstructor
+                key={`${horario.idHorario}-${horario.instructor?.idInstructor ?? 'sin-instructor'}`} // Combinación única de idHorario e idInstructor
                 className="border-t bg-white hover:bg-blue-50"
               >
                 <td className="p-3">{horario.nombrePrograma}</td> {/* Cambiado de nombreFicha a nombrePrograma */}
@@ -99,6 +107,14 @@ export default function HorarioAmbiente({ nombreAmbiente }: { nombreAmbiente: st
                 <td className="p-3">{horario.anoTrimestre}</td>
                 <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
                 <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+                <td className="p-3 text-center">
+                  <AiOutlineCalendar
+                    className="text-blue-500 cursor-pointer"
+                    size={24}
+                    title="Ver calendario"
+                    onClick={handleCalendarClick} // Manejador de clic para redirección
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
