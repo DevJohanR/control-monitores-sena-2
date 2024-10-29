@@ -4,7 +4,7 @@ import React from 'react';
 interface Horario {
   idHorario: number;
   nombrePrograma: string;
-  numeroFicha: string;
+  //numeroFicha: string;
   competencia: string;
   ra: string;
   nombreAmbiente: string;
@@ -34,7 +34,7 @@ const CalendarioFicha: React.FC<CalendarioFichaProps> = ({ horarios, tipoFiltro 
       .map((h, index) => (
         <div key={index} className="p-2 bg-blue-100 rounded mb-2">
           <p><strong>{h.nombrePrograma}</strong></p>
-          <p>{h.numeroFicha}</p>
+         {/*<p>{h.numeroFicha}</p>*/}
           <p>{h.competencia}</p>
           <p>{h.ra}</p>
           <p>{`Bloque: ${h.bloque}, Ambiente: ${h.nombreAmbiente}, Sede: ${h.sede}`}</p>

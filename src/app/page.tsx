@@ -5,7 +5,7 @@ import FormularioHorario from "@/components/02-molecules/FormularioHorario";
 import HorarioAmbiente from "@/components/02-molecules/HorarioAmbiente";
 import HorarioFicha from "@/components/02-molecules/HorarioFicha";
 import HorarioInstructor from "@/components/02-molecules/HorarioInstructor";
-import { CiCalendarDate } from "react-icons/ci";
+import Header from '@/components/02-molecules/Header';
 
 
 interface Ficha {
@@ -93,7 +93,10 @@ export default function Home() {
   }, [fichas, ambientes]);
 
   return (
-    <div className="flex flex-col gap-12">
+    <>
+    <Header/>
+    <div className="flex flex-col gap-12 mt-12">
+
       <section>
         <FormularioHorario />
       </section>
@@ -107,8 +110,7 @@ export default function Home() {
         <div className="flex items-center space-x-4 p-2">
           <label htmlFor="ficha" className="text-sm font-medium text-gray-700 min-w-max">
             Seleccione una Ficha
-          </label><span><CiCalendarDate />
-          </span>
+          </label>
           <select
             id="ficha"
             value={selectedFicha}
@@ -140,8 +142,7 @@ export default function Home() {
         <div className="flex items-center space-x-4 p-2">
           <label htmlFor="ambiente" className="text-sm font-medium text-gray-700 min-w-max">
             Seleccione un Ambiente
-          </label> <span><CiCalendarDate />
-          </span>
+          </label>
           <select
             id="ambiente"
             value={selectedAmbiente}
@@ -168,5 +169,6 @@ export default function Home() {
         )}
       </section>
     </div>
+    </>
   );
 }
