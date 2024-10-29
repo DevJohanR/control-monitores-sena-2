@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AiOutlineCalendar } from 'react-icons/ai'; // Importamos el ícono de calendario
+import { AiOutlineCalendar } from 'react-icons/ai';
 
 interface Instructor {
   idInstructor: number;
@@ -34,11 +34,13 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
+        console.log('Fetching horarios para la ficha:', numeroFicha);
         const response = await fetch(`/api/horarios/${numeroFicha}`);
         if (!response.ok) {
           throw new Error('Error al obtener los horarios de la ficha');
         }
         const data: Horario[] = await response.json();
+        console.log('Horarios recibidos para la ficha:', data);
         setHorarios(data);
       } catch (error) {
         console.error('Error al cargar los horarios:', error);
@@ -79,7 +81,7 @@ export default function HorarioFicha({ numeroFicha }: { numeroFicha: string }) {
               <th className="p-3 text-left font-semibold">Trimestre</th>
               <th className="p-3 text-left font-semibold">Hora Inicio</th>
               <th className="p-3 text-left font-semibold">Hora Fin</th>
-              <th className="p-3 text-left font-semibold">Calendario</th> {/* Nueva columna para el ícono */}
+              <th className="p-3 text-left font-semibold">Calendario</th>
             </tr>
           </thead>
           <tbody>
