@@ -16,7 +16,9 @@ export default function Header() {
         router.push("/formulario-instructor");
       };
 
-
+      const handleManagePrograms = () => {
+        router.push("/programas"); // Redireccionar a la nueva página
+    };
 
     return (
         <div className="fixed top-0 w-full flex justify-between items-center h-16 shadow-md bg-white px-6 z-50 text-gray-700">
@@ -36,6 +38,14 @@ export default function Header() {
                         className="bg-blue-500 text-black hover:bg-blue-700 hover:text-white" 
                         icon={<FaPlus />} 
                     />
+
+<Button
+                    text="Programas"
+                    onClick={handleManagePrograms}
+                    className="bg-blue-500 text-black hover:bg-blue-700 hover:text-white"
+                    icon={<FaPlus />}
+                />
+
             </div>
         </div>
     );

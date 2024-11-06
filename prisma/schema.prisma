@@ -17,15 +17,16 @@ datasource db {
 model Instructor {
   idInstructor     Int       @id @default(autoincrement())
   nombreInstructor String    @unique
-  horarios         Horario[] // Relación uno a muchos con la tabla Horario
+  horarios         Horario[] 
+  user             User?      @relation(fields: [userId], references: [id])
+  userId           Int?       @unique
 }
 
 model Horario {
   idHorario        Int       @id @default(autoincrement())
-
-  nombrePrograma      String
+  nombrePrograma   String
   numeroFicha      String
-  competencia             String
+  competencia      String
   ra               String
   nombreAmbiente   String
   bloque           String
@@ -36,10 +37,48 @@ model Horario {
   anoTrimestre     Int
   horaInicio       DateTime
   horaFin          DateTime
-
-  // Relación con Instructor
   idInstructor     Int
-  instructor       Instructor  @relation(fields: [idInstructor], references: [idInstructor]) // Definimos la FK
+  instructor       Instructor  @relation(fields: [idInstructor], references: [idInstructor])
 }
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  password     String
+  role         Role      @relation(fields: [roleId], references: [id])
+  roleId       Int
+  instructor   Instructor?
+  instructorId Int?
+}
+
+model Role {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  users User[]
+}
+
+model Programa {
+  idPrograma     Int           @id @default(autoincrement())
+  nombrePrograma String
+  competencias   Competencia[] 
+}
+
+model Competencia {
+  idCompetencia     Int           @id @default(autoincrement())
+  nombreCompetencia String
+  programa          Programa      @relation(fields: [programaId], references: [idPrograma])
+  programaId        Int
+  ra                RA[]
+}
+
+  model RA {
+    idRA             Int         @id @default(autoincrement())
+    descripcionRA    String
+ 
+    competencia      Competencia @relation(fields: [competenciaId], references: [idCompetencia])
+    competenciaId    Int
+  }
+
+
 
 

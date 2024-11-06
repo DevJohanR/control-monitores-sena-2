@@ -3,17 +3,31 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import Titulo from '../01-atoms/Titulo';
 
-// Definimos la estructura de los datos del formulario
 interface Instructor {
   idInstructor: number;
   nombreInstructor: string;
 }
 
+interface Programa {
+  idPrograma: number;
+  nombrePrograma: string;
+}
+
+interface Competencia {
+  idCompetencia: number;
+  nombreCompetencia: string;
+}
+
+interface RA {
+  idRA: number;
+  descripcionRA: string;
+}
+
 interface HorarioFormData {
   idInstructor: number;
-  nombrePrograma: string;  // Cambiado de nombreFicha a nombrePrograma
+  nombrePrograma: string;
   numeroFicha: string;
-  competencia: string;  // Cambiado de tema a competencia
+  competencia: string;
   ra: string;
   nombreAmbiente: string;
   bloque: string;
@@ -27,7 +41,14 @@ interface HorarioFormData {
 }
 
 export default function FormularioHorario() {
-  const [instructores, setInstructores] = useState<Instructor[]>([]); // Estado para almacenar los instructores
+  const [instructores, setInstructores] = useState<Instructor[]>([]);
+  const [programas, setProgramas] = useState<Programa[]>([]);
+  const [competencias, setCompetencias] = useState<Competencia[]>([]);
+  const [raOptions, setRAOptions] = useState<RA[]>([]);
+
+  const [selectedPrograma, setSelectedPrograma] = useState<number | null>(null);
+  const [selectedCompetencia, setSelectedCompetencia] = useState<number | null>(null);
+
   const [formData, setFormData] = useState<HorarioFormData>({
     idInstructor: 0,
     nombrePrograma: '',
@@ -45,24 +66,87 @@ export default function FormularioHorario() {
     horaFin: ''
   });
 
-  // Cargar los instructores desde la API
+  // Cargar instructores desde la API
   useEffect(() => {
     const fetchInstructores = async () => {
       try {
         const response = await fetch('/api/instructores');
-        if (!response.ok) {
-          throw new Error('Error al obtener los instructores');
-        }
+        if (!response.ok) throw new Error('Error al obtener los instructores');
         const data: Instructor[] = await response.json();
-        console.log('Instructores cargados:', data); // Verificar en consola
         setInstructores(data);
       } catch (error) {
-        console.error('Error al cargar los instructores:', error); // Manejo del error
+        console.error('Error al cargar los instructores:', error);
       }
     };
-
     fetchInstructores();
   }, []);
+
+  // Cargar programas desde la API
+  useEffect(() => {
+    const fetchProgramas = async () => {
+      try {
+        const response = await fetch('/api/programas');
+        if (!response.ok) throw new Error('Error al obtener los programas');
+        const data: Programa[] = await response.json();
+        setProgramas(data);
+      } catch (error) {
+        console.error('Error al cargar los programas:', error);
+      }
+    };
+    fetchProgramas();
+  }, []);
+
+  // Cargar competencias del programa seleccionado y actualizar formData
+  useEffect(() => {
+    if (selectedPrograma) {
+      const fetchCompetencias = async () => {
+        try {
+          const response = await fetch(`/api/competencias/${selectedPrograma}`);
+          if (!response.ok) throw new Error('Error al obtener competencias');
+          const data: Competencia[] = await response.json();
+          setCompetencias(data);
+        } catch (error) {
+          console.error('Error al cargar las competencias:', error);
+        }
+      };
+      fetchCompetencias();
+
+      const programa = programas.find((p) => p.idPrograma === selectedPrograma);
+      setFormData((prev) => ({
+        ...prev,
+        nombrePrograma: programa ? programa.nombrePrograma : ''
+      }));
+    } else {
+      setCompetencias([]);
+      setFormData((prev) => ({ ...prev, nombrePrograma: '' }));
+    }
+  }, [selectedPrograma, programas]);
+
+  // Cargar RA de la competencia seleccionada y actualizar formData
+  useEffect(() => {
+    if (selectedCompetencia) {
+      const fetchRA = async () => {
+        try {
+          const response = await fetch(`/api/ra/${selectedCompetencia}`);
+          if (!response.ok) throw new Error('Error al obtener RA');
+          const data: RA[] = await response.json();
+          setRAOptions(data);
+        } catch (error) {
+          console.error('Error al cargar los RA:', error);
+        }
+      };
+      fetchRA();
+
+      const competencia = competencias.find((c) => c.idCompetencia === selectedCompetencia);
+      setFormData((prev) => ({
+        ...prev,
+        competencia: competencia ? competencia.nombreCompetencia : ''
+      }));
+    } else {
+      setRAOptions([]);
+      setFormData((prev) => ({ ...prev, competencia: '' }));
+    }
+  }, [selectedCompetencia, competencias]);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setFormData({
@@ -74,21 +158,21 @@ export default function FormularioHorario() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Convertir idInstructor a número
+    // Convertir campos a los tipos esperados por Prisma
     const updatedFormData = {
       ...formData,
-      idInstructor: parseInt(formData.idInstructor.toString(), 10), // Asegurarse de que sea un número
+      idInstructor: parseInt(formData.idInstructor.toString(), 10),
+      numeroTrimestre: parseInt(formData.numeroTrimestre.toString(), 10),
+      anoTrimestre: parseInt(formData.anoTrimestre.toString(), 10),
+      horaInicio: new Date(formData.horaInicio),
+      horaFin: new Date(formData.horaFin),
     };
-
-    console.log('Datos enviados:', updatedFormData); // Verifica los datos antes de enviarlos
 
     try {
       const response = await fetch('/api/horarios', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedFormData), // Enviar los datos actualizados con idInstructor como número
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFormData),
       });
 
       if (response.ok) {
@@ -110,8 +194,7 @@ export default function FormularioHorario() {
           horaFin: ''
         });
       } else {
-        const errorData = await response.json(); // Obtener la respuesta de error
-        console.error('Error al guardar el horario:', errorData);
+        const errorData = await response.json();
         alert(`Error al guardar el horario: ${errorData.error}`);
       }
     } catch (error) {
@@ -123,13 +206,9 @@ export default function FormularioHorario() {
     <form className="container mx-auto my-8 px-4" onSubmit={handleSubmit}>
       <Titulo texto="Crear Horarios" />
 
-      {/* Ajustamos el layout para que el select del instructor ocupe toda una fila */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        {/* Select para los instructores, ocupando una fila completa */}
         <div className="col-span-4 flex gap-4 items-center">
-          <label htmlFor="idInstructor" className="text-sm font-medium text-gray-700">
-            Seleccione un Instructor
-          </label>
+          <label htmlFor="idInstructor" className="text-sm font-medium text-gray-700">Seleccione un Instructor</label>
           <select
             name="idInstructor"
             value={formData.idInstructor}
@@ -138,157 +217,82 @@ export default function FormularioHorario() {
             className="w-full lg:w-96 p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Seleccione un Instructor</option>
-            {instructores.length > 0 ? (
-              instructores.map((instructor) => (
-                <option key={instructor.idInstructor} value={instructor.idInstructor}>
-                  {instructor.nombreInstructor}
-                </option>
-              ))
-            ) : (
-              <option disabled>Cargando instructores...</option>
-            )}
+            {instructores.map(instructor => (
+              <option key={instructor.idInstructor} value={instructor.idInstructor}>
+                {instructor.nombreInstructor}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* Otros campos del formulario */}
-        <input
-          type="text"
-          name="nombrePrograma"
-          value={formData.nombrePrograma}
-          onChange={handleChange}
-          placeholder="Nombre del Programa"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="numeroFicha"
-          value={formData.numeroFicha}
-          onChange={handleChange}
-          placeholder="Número Ficha"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="competencia"
-          value={formData.competencia}
-          onChange={handleChange}
-          placeholder="Competencia"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="ra"
-          value={formData.ra}
-          onChange={handleChange}
-          placeholder="Resultado de Aprendizaje"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="nombreAmbiente"
-          value={formData.nombreAmbiente}
-          onChange={handleChange}
-          placeholder="Nombre Ambiente"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="bloque"
-          value={formData.bloque}
-          onChange={handleChange}
-          placeholder="Bloque"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="text"
-          name="sede"
-          value={formData.sede}
-          onChange={handleChange}
-          placeholder="Sede"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
         <select
-          name="jornada"
-          value={formData.jornada}
-          onChange={handleChange}
+          name="nombrePrograma"
+          value={selectedPrograma || ''}
+          onChange={(e) => setSelectedPrograma(Number(e.target.value))}
           required
           className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="">Seleccione un Programa</option>
+          {programas.map((programa) => (
+            <option key={programa.idPrograma} value={programa.idPrograma}>
+              {programa.nombrePrograma}
+            </option>
+          ))}
+        </select>
+
+        {selectedPrograma && (
+          <select
+            name="competencia"
+            value={selectedCompetencia || ''}
+            onChange={(e) => setSelectedCompetencia(Number(e.target.value))}
+            required
+            className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione una Competencia</option>
+            {competencias.map((competencia) => (
+              <option key={competencia.idCompetencia} value={competencia.idCompetencia}>
+                {competencia.nombreCompetencia}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {selectedCompetencia && (
+          <select
+            name="ra"
+            value={formData.ra}
+            onChange={handleChange}
+            required
+            className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione un RA</option>
+            {raOptions.map((ra) => (
+              <option key={ra.idRA} value={ra.descripcionRA}>
+                {ra.descripcionRA}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Campos adicionales del formulario */}
+        <input type="text" name="numeroFicha" placeholder="Número Ficha" onChange={handleChange} value={formData.numeroFicha} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="text" name="nombreAmbiente" placeholder="Nombre Ambiente" onChange={handleChange} value={formData.nombreAmbiente} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="text" name="bloque" placeholder="Bloque" onChange={handleChange} value={formData.bloque} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="text" name="sede" placeholder="Sede" onChange={handleChange} value={formData.sede} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <select name="jornada" onChange={handleChange} value={formData.jornada} required className="w-full p-1.5 border border-gray-300 rounded-md">
           <option value="">Seleccione una Jornada</option>
           <option value="Manana">Mañana</option>
           <option value="Tarde">Tarde</option>
           <option value="Noche">Noche</option>
         </select>
-
-        <input
-          type="text"
-          name="diaSemana"
-          value={formData.diaSemana}
-          onChange={handleChange}
-          placeholder="Día de la Semana"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="number"
-          name="numeroTrimestre"
-          value={formData.numeroTrimestre}
-          onChange={handleChange}
-          placeholder="Número Trimestre"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="number"
-          name="anoTrimestre"
-          value={formData.anoTrimestre}
-          onChange={handleChange}
-          placeholder="Año Trimestre"
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="datetime-local"
-          name="horaInicio"
-          value={formData.horaInicio}
-          onChange={handleChange}
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <input
-          type="datetime-local"
-          name="horaFin"
-          value={formData.horaFin}
-          onChange={handleChange}
-          required
-          className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <input type="text" name="diaSemana" placeholder="Día de la Semana" onChange={handleChange} value={formData.diaSemana} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="number" name="numeroTrimestre" placeholder="Número Trimestre" onChange={handleChange} value={formData.numeroTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="number" name="anoTrimestre" placeholder="Año Trimestre" onChange={handleChange} value={formData.anoTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="datetime-local" name="horaInicio" onChange={handleChange} value={formData.horaInicio} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="datetime-local" name="horaFin" onChange={handleChange} value={formData.horaFin} required className="w-full p-1.5 border border-gray-300 rounded-md" />
       </div>
 
-      <button
-        type="submit"
-        className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
-      >
-        Guardar Horario
-      </button>
+      <button type="submit" className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Guardar Horario</button>
     </form>
   );
 }
