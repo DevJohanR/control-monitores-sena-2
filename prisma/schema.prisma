@@ -81,5 +81,12 @@ model Competencia {
   }
 
 
+model Archivo {
+  id      Int     @id @default(autoincrement())
+  nombre  String
+  ruta    String
+  programaPerteneciente String?
+  creado  DateTime @default(now())
+}
 
 

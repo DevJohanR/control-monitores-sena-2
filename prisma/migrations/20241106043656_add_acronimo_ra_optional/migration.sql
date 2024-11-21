@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `RA` ADD COLUMN `acronimoRA` VARCHAR(191) NULL;
