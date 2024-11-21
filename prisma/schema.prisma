@@ -74,7 +74,8 @@ model Competencia {
   model RA {
     idRA             Int         @id @default(autoincrement())
     descripcionRA    String
- 
+      acronimoRA    String?      // Nuevo campo para el acrónimo
+
     competencia      Competencia @relation(fields: [competenciaId], references: [idCompetencia])
     competenciaId    Int
   }

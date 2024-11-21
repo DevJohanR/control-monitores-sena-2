@@ -16,3 +16,5 @@ export async function GET(request: Request, { params }: { params: { competenciaI
     return NextResponse.json({ error: "Error al obtener los RA" }, { status: 500 });
   }
 }
+
+

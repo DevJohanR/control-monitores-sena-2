@@ -1,4 +1,4 @@
-// app/api/programas/route.ts
+// app/api/competencias/route.ts
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
@@ -26,20 +26,9 @@ export async function GET() {
 // Crear un nuevo programa con competencias y RA
 export async function POST(request: Request) {
   const data = await request.json();
-  console.log("Datos recibidos en el backend:", JSON.stringify(data, null, 2)); // Depuración para ver datos
-
   const { nombrePrograma, competencias } = data;
 
-  if (!nombrePrograma) {
-    return NextResponse.json({ error: "Nombre del programa es requerido" }, { status: 400 });
-  }
-
-  if (!Array.isArray(competencias) || competencias.length === 0) {
-    return NextResponse.json({ error: "Al menos una competencia es requerida" }, { status: 400 });
-  }
-
   try {
-    // Crear el programa junto con competencias y RA asociados
     const newPrograma = await prisma.programa.create({
       data: {
         nombrePrograma,
@@ -47,8 +36,9 @@ export async function POST(request: Request) {
           create: competencias.map((competencia) => ({
             nombreCompetencia: competencia.nombreCompetencia,
             ra: {
-              create: competencia.ra.map((descripcionRA: string) => ({
-                descripcionRA,
+              create: competencia.ra.map((ra) => ({
+                descripcionRA: ra.descripcionRA,
+                acronimoRA: ra.acronimoRA, // Incluye acronimoRA
               })),
             },
           })),
@@ -63,7 +53,6 @@ export async function POST(request: Request) {
       },
     });
 
-    console.log("Programa creado con competencias y RA:", JSON.stringify(newPrograma, null, 2)); // Depuración
     return NextResponse.json(newPrograma);
   } catch (error) {
     console.error("Error al crear el programa con competencias y RA:", error);
