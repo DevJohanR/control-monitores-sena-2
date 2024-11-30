@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import CalendarioHorario from '@/components/02-molecules/CalendarioHorario';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import CalendarioHorario from "@/components/02-molecules/CalendarioHorario";
+import { FaCalendarAlt } from "react-icons/fa";
 
 interface Horario {
   idHorario: number;
@@ -39,16 +40,15 @@ export default function CalendarioInstructor() {
       try {
         const response = await fetch(`/api/horarios/instructor/${idInstructor}`);
         if (!response.ok) {
-          throw new Error('Error al obtener los horarios');
+          throw new Error("Error al obtener los horarios");
         }
         const data: Horario[] = await response.json();
-        
-        // Verifica en la consola los horarios obtenidos
-        console.log('Horarios con Instructor:', data);
+
+        console.log("Horarios con Instructor:", data);
 
         setHorarios(data);
       } catch (error) {
-        console.error('Error al cargar los horarios:', error);
+        console.error("Error al cargar los horarios:", error);
       }
     };
 
@@ -56,16 +56,15 @@ export default function CalendarioInstructor() {
       try {
         const response = await fetch(`/api/instructores/${idInstructor}`);
         if (!response.ok) {
-          throw new Error('Error al obtener los datos del instructor');
+          throw new Error("Error al obtener los datos del instructor");
         }
         const instructorData: Instructor = await response.json();
 
-        // Verifica en la consola los datos del instructor
-        console.log('Datos del Instructor:', instructorData);
+        console.log("Datos del Instructor:", instructorData);
 
         setInstructor(instructorData);
       } catch (error) {
-        console.error('Error al cargar el instructor:', error);
+        console.error("Error al cargar el instructor:", error);
       }
     };
 
@@ -74,8 +73,19 @@ export default function CalendarioInstructor() {
   }, [idInstructor]);
 
   return (
-    <div>
-      <h2>Calendario de Horarios de {instructor?.nombreInstructor || 'Instructor'}</h2>
+    <div className="container mx-auto p-6">
+      {/* Título Mejorado */}
+      <div className="flex items-center justify-center mb-8">
+        <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
+        <h2 className="text-3xl font-bold text-gray-700">
+          Calendario de Horarios de{" "}
+          <span className="text-blue-500">
+            {instructor?.nombreInstructor || "Instructor"}
+          </span>
+        </h2>
+      </div>
+
+      {/* Componente de Calendario */}
       <CalendarioHorario horarios={horarios} tipoFiltro="Instructor" />
     </div>
   );
