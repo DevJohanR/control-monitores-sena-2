@@ -20,6 +20,14 @@ export default function Header() {
         router.push("/programas"); // Redireccionar a la nueva página
     };
 
+    const handleAddFichas = () => {
+        router.push("/formulario-ficha")
+    }
+
+    const handleAddArchivos = () => {
+        router.push("/nube")
+    }
+
     return (
         <div className="fixed top-0 w-full flex justify-between items-center h-16 shadow-md bg-white px-6 z-50 text-gray-700">
             <span><Logo /></span>
@@ -33,8 +41,8 @@ export default function Header() {
                     />
 
 <Button 
-                        text="RA" 
-                        onClick={() => console.log('Profile button clicked')} 
+                        text="Fichas" 
+                        onClick={handleAddFichas} 
                         className="bg-blue-500 text-black hover:bg-blue-700 hover:text-white" 
                         icon={<FaPlus />} 
                     />
@@ -45,6 +53,14 @@ export default function Header() {
                     className="bg-blue-500 text-black hover:bg-blue-700 hover:text-white"
                     icon={<FaPlus />}
                 />
+
+<Button
+                    text="Archivos"
+                    onClick={handleAddArchivos}
+                    className="bg-blue-500 text-black hover:bg-blue-700 hover:text-white"
+                    icon={<FaPlus />}
+                />
+
 
             </div>
         </div>

@@ -318,9 +318,25 @@ export default function FormularioHorario() {
           <option value="Tarde">Tarde</option>
           <option value="Noche">Noche</option>
         </select>
-        <input type="text" name="diaSemana" placeholder="Día de la Semana" onChange={handleChange} value={formData.diaSemana} required className="w-full p-1.5 border border-gray-300 rounded-md" />
-        <input type="number" name="numeroTrimestre" placeholder="Número Trimestre" onChange={handleChange} value={formData.numeroTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
-        <input type="number" name="anoTrimestre" placeholder="Año Trimestre" onChange={handleChange} value={formData.anoTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <select
+  name="diaSemana"
+  value={formData.diaSemana}
+  onChange={handleChange}
+  required
+  className="w-full p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
+  <option value="">Seleccione un Día</option>
+  <option value="Lunes">Lunes</option>
+  <option value="Martes">Martes</option>
+  <option value="Miércoles">Miércoles</option>
+  <option value="Jueves">Jueves</option>
+  <option value="Viernes">Viernes</option>
+  <option value="Sabado">Sabado</option>
+</select>
+
+        
+        <input type="number" name="numeroTrimestre" placeholder="Número Trimestre" onChange={handleChange} value={formData.numeroTrimestre === 0 ? "" : formData.numeroTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        <input type="number" name="anoTrimestre" placeholder="Año Trimestre" onChange={handleChange} value={formData.anoTrimestre === 0 ? "" : formData.anoTrimestre} required className="w-full p-1.5 border border-gray-300 rounded-md" />
         <input type="datetime-local" name="horaInicio" onChange={handleChange} value={formData.horaInicio} required className="w-full p-1.5 border border-gray-300 rounded-md" />
         <input type="datetime-local" name="horaFin" onChange={handleChange} value={formData.horaFin} required className="w-full p-1.5 border border-gray-300 rounded-md" />
       </div>
