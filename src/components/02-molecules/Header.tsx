@@ -5,7 +5,7 @@ import React from 'react';
 
 import Logo from '../01-atoms/Logo';
 import Button from '../01-atoms/Button';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus,FaBookOpen } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 
 
@@ -27,6 +27,11 @@ export default function Header() {
     const handleAddArchivos = () => {
         router.push("/nube")
     }
+
+    const handleDocumentationPage = () => {
+        router.push("/documentacion-page");
+      };
+    
 
     return (
         <div className="fixed top-0 w-full flex justify-between items-center h-16 shadow-md bg-white px-6 z-50 text-gray-700">
@@ -61,7 +66,14 @@ export default function Header() {
                     icon={<FaPlus />}
                 />
 
-
+{/* Botón de Documentación */}
+<button
+          onClick={handleDocumentationPage}
+          className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out flex items-center gap-2 border-2 border-white hover:border-purple-700"
+        >
+          <FaBookOpen className="text-lg" />
+          Documentación
+        </button>
             </div>
         </div>
     );

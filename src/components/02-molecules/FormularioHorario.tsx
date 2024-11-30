@@ -318,7 +318,7 @@ export default function FormularioHorario() {
           <option value="Tarde">Tarde</option>
           <option value="Noche">Noche</option>
         </select>
-        <select
+   <select
   name="diaSemana"
   value={formData.diaSemana}
   onChange={handleChange}

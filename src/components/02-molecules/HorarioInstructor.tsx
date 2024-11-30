@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { FaTrash } from 'react-icons/fa'; // Ícono de eliminación
 import Titulo from '../01-atoms/Titulo';
 
 interface Horario {
@@ -7,7 +8,7 @@ interface Horario {
   nombrePrograma: string;
   numeroFicha: string;
   competencia: string;
-  ra: string;  // Incluimos la propiedad de "RA"
+  ra: string;
   nombreAmbiente: string;
   bloque: string;
   sede: string;
@@ -30,6 +31,7 @@ export default function HorarioInstructor() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Cargar los horarios desde la API
   useEffect(() => {
     const fetchHorarios = async () => {
       try {
@@ -38,7 +40,7 @@ export default function HorarioInstructor() {
           throw new Error('Error al obtener los horarios');
         }
         const data = await response.json();
-        
+
         if (Array.isArray(data)) {
           setHorarios(data);
         } else {
@@ -55,6 +57,30 @@ export default function HorarioInstructor() {
     fetchHorarios();
   }, []);
 
+  // Manejar la eliminación de un horario
+  const handleDeleteHorario = async (idHorario: number) => {
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar este horario?');
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`/api/horarios?idHorario=${idHorario}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el horario');
+      }
+
+      // Eliminar el horario del estado local
+      setHorarios((prevHorarios) => prevHorarios.filter((horario) => horario.idHorario !== idHorario));
+      alert('Horario eliminado correctamente');
+    } catch (error) {
+      console.error('Error al eliminar el horario:', error);
+      alert('Error al eliminar el horario');
+    }
+  };
+
+  // Redirigir al calendario del instructor
   const handleInstructorClick = (idInstructor: number) => {
     router.push(`/calendario-instructor/${idInstructor}`);
   };
@@ -74,13 +100,14 @@ export default function HorarioInstructor() {
               <th className="p-3 text-left font-semibold">Programa</th>
               <th className="p-3 text-left font-semibold">Número Ficha</th>
               <th className="p-3 text-left font-semibold">Competencia</th>
-              <th className="p-3 text-left font-semibold">RA</th> {/* Nueva columna para RA */}
+              <th className="p-3 text-left font-semibold">RA</th>
               <th className="p-3 text-left font-semibold">Ambiente</th>
               <th className="p-3 text-left font-semibold">Jornada</th>
               <th className="p-3 text-left font-semibold">Día</th>
               <th className="p-3 text-left font-semibold">Trimestre</th>
               <th className="p-3 text-left font-semibold">Hora Inicio</th>
               <th className="p-3 text-left font-semibold">Hora Fin</th>
+              <th className="p-3 text-center font-semibold">Acciones</th> {/* Nueva columna */}
             </tr>
           </thead>
           <tbody>
@@ -98,13 +125,22 @@ export default function HorarioInstructor() {
                 <td className="p-3">{horario.nombrePrograma}</td>
                 <td className="p-3">{horario.numeroFicha}</td>
                 <td className="p-3">{horario.competencia}</td>
-                <td className="p-3">{horario.ra}</td> {/* Mostrar los RA */}
+                <td className="p-3">{horario.ra}</td>
                 <td className="p-3">{horario.nombreAmbiente}</td>
                 <td className="p-3">{horario.jornada}</td>
                 <td className="p-3">{horario.diaSemana}</td>
                 <td className="p-3">{horario.numeroTrimestre}</td>
                 <td className="p-3">{new Date(horario.horaInicio).toLocaleString()}</td>
                 <td className="p-3">{new Date(horario.horaFin).toLocaleString()}</td>
+                <td className="p-3 text-center">
+                  <button
+                    onClick={() => handleDeleteHorario(horario.idHorario)}
+                    className="text-red-500 hover:text-red-700"
+                    title="Eliminar horario"
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
