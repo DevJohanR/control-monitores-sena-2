@@ -69,3 +69,50 @@ export async function POST(request: Request, { params }: { params: { programaId:
   }
 }
 
+
+// Eliminar un programa junto con sus competencias y RA
+export async function DELETE(request: Request, { params }: { params: { programaId: string } }) {
+  const programaId = Number(params.programaId);
+
+  if (isNaN(programaId)) {
+    return NextResponse.json({ error: 'El ID del programa debe ser un número válido' }, { status: 400 });
+  }
+
+  try {
+    // Verificar si el programa existe
+    const programa = await prisma.programa.findUnique({
+      where: { idPrograma: programaId },
+    });
+
+    if (!programa) {
+      return NextResponse.json({ error: 'El programa no existe' }, { status: 404 });
+    }
+
+    // Eliminar RA relacionados primero
+    await prisma.rA.deleteMany({
+      where: {
+        competencia: {
+          programaId: programaId,
+        },
+      },
+    });
+
+    // Eliminar las competencias relacionadas
+    await prisma.competencia.deleteMany({
+      where: { programaId: programaId },
+    });
+
+    // Finalmente, eliminar el programa
+    await prisma.programa.delete({
+      where: { idPrograma: programaId },
+    });
+
+    return NextResponse.json(
+      { message: `Programa con ID ${programaId} eliminado exitosamente` },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error al eliminar el programa:', error);
+    return NextResponse.json({ error: 'Error al eliminar el programa' }, { status: 500 });
+  }
+}

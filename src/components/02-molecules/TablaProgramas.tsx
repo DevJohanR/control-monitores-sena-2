@@ -2,6 +2,7 @@
 // JOAHNN
 
 import React, { useState, useEffect } from 'react';
+import { FaTrash } from 'react-icons/fa';
 
 // Definir las interfaces para los datos
 interface Programa {
@@ -52,6 +53,30 @@ export default function TablaProgramas() {
     fetchProgramas();
   }, []);
 
+  const handleDeletePrograma = async (idPrograma: number) => {
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar este programa?');
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`/api/competencias/${idPrograma}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Programa eliminado correctamente');
+        setProgramas((prevProgramas) =>
+          prevProgramas.filter((programa) => programa.idPrograma !== idPrograma)
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error al eliminar el programa: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error('Error al eliminar el programa:', error);
+      alert('Error al eliminar el programa');
+    }
+  };
+
   const handleAddRA = () => {
     const newRAIndex = newRA.length + 1;
     setNewRA([...newRA, { descripcionRA: '', acronimoRA: `RA${newRAIndex}` }]);
@@ -101,6 +126,7 @@ export default function TablaProgramas() {
             <th className="py-3 px-6 text-left text-gray-700 font-semibold border-b">Competencia</th>
             <th className="py-3 px-6 text-left text-gray-700 font-semibold border-b">Acrónimo RA</th>
             <th className="py-3 px-6 text-left text-gray-700 font-semibold border-b">Resultado de Aprendizaje (RA)</th>
+            <th className="py-3 px-6 text-center text-gray-700 font-semibold border-b">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -138,6 +164,22 @@ export default function TablaProgramas() {
                         ))}
                       </ul>
                     </td>
+                    {i === 0 && (
+                      <td
+                        rowSpan={programa.competencias.length}
+                        className="py-3 px-6 border-b text-center align-top"
+                      >
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Evitar conflicto con el modal
+                            handleDeletePrograma(programa.idPrograma);
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 </React.Fragment>
               ))}
