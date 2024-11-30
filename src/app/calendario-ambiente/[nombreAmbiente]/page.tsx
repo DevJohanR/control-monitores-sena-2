@@ -4,6 +4,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import CalendarioAmbiente from '@/components/02-molecules/CalendarioAmbiente';
+import { FaCalendarAlt } from 'react-icons/fa'; // Ícono para el título
+
 
 interface Horario {
   idHorario: number;
@@ -53,9 +55,18 @@ export default function CalendarioAmbientePage() {
   }, [nombreAmbiente]);
 
   return (
-    <div>
-      <h2>Calendario de Horarios del Ambiente {nombreAmbiente}</h2>
-      <CalendarioAmbiente horarios={horarios} tipoFiltro="Ambiente" />
+    <div className="container mx-auto p-6">
+    {/* Título estilizado */}
+    <div className="flex items-center justify-center mb-8">
+      <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
+      <h2 className="text-3xl font-bold text-gray-700">
+        Calendario de Horarios del Ambiente{" "}
+        <span className="text-blue-500">{nombreAmbiente}</span>
+      </h2>
     </div>
+
+    {/* Componente de calendario */}
+    <CalendarioAmbiente horarios={horarios} tipoFiltro="Ambiente" />
+  </div>
   );
 }

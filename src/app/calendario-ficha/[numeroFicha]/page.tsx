@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import CalendarioFicha from '@/components/02-molecules/CalendarioFicha';
+import { FaCalendarAlt } from 'react-icons/fa'; // Ícono para el título
 
 interface Horario {
   idHorario: number;
@@ -50,9 +51,18 @@ export default function CalendarioFichaPage() {
   }, [numeroFicha]);
 
   return (
-    <div>
-      <h2>Calendario de Horarios de la Ficha {numeroFicha}</h2>
-      <CalendarioFicha horarios={horarios} tipoFiltro="Ficha" />
+    <div className="container mx-auto p-6">
+    {/* Título estilizado */}
+    <div className="flex items-center justify-center mb-8">
+      <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
+      <h2 className="text-3xl font-bold text-gray-700">
+        Calendario de Horarios de la Ficha{" "}
+        <span className="text-blue-500">{numeroFicha}</span>
+      </h2>
     </div>
+
+    {/* Componente de calendario */}
+    <CalendarioFicha horarios={horarios} tipoFiltro="Ficha" />
+  </div>
   );
 }
