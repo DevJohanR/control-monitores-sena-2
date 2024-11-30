@@ -90,3 +90,8 @@ model Archivo {
 }
 
 
+model Ficha {
+  idFicha        Int    @id @default(autoincrement())
+  numeroFicha    String
+ 
+}

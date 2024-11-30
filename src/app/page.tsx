@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import FormularioHorario from "@/components/02-molecules/FormularioHorario";
 import HorarioAmbiente from "@/components/02-molecules/HorarioAmbiente";
 import HorarioFicha from "@/components/02-molecules/HorarioFicha";
@@ -22,6 +23,15 @@ export default function Home() {
   const [selectedFicha, setSelectedFicha] = useState<string>('');
   const [ambientes, setAmbientes] = useState<Ambiente[]>([]);
   const [selectedAmbiente, setSelectedAmbiente] = useState<string>('');
+  const router = useRouter();
+
+  // Redirigir al login si el usuario no está autenticado
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    if (!isAuthenticated) {
+      router.push('/login'); // Redirige al login si no está autenticado
+    }
+  }, [router]);
 
   // Cargar las fichas desde la API
   useEffect(() => {

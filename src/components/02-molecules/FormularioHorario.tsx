@@ -3,6 +3,11 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import Titulo from '../01-atoms/Titulo';
 
+interface Ficha {
+  idFicha: number;
+  numeroFicha: string;
+}
+
 interface Instructor {
   idInstructor: number;
   nombreInstructor: string;
@@ -41,6 +46,7 @@ interface HorarioFormData {
 }
 
 export default function FormularioHorario() {
+  const [fichas, setFichas] = useState<Ficha[]>([]);
   const [instructores, setInstructores] = useState<Instructor[]>([]);
   const [programas, setProgramas] = useState<Programa[]>([]);
   const [competencias, setCompetencias] = useState<Competencia[]>([]);
@@ -65,6 +71,21 @@ export default function FormularioHorario() {
     horaInicio: '',
     horaFin: ''
   });
+
+  // Cargar fichas desde la API
+  useEffect(() => {
+    const fetchFichas = async () => {
+      try {
+        const response = await fetch('/api/cargarficha');
+        if (!response.ok) throw new Error('Error al obtener las fichas');
+        const data: Ficha[] = await response.json();
+        setFichas(data);
+      } catch (error) {
+        console.error('Error al cargar las fichas:', error);
+      }
+    };
+    fetchFichas();
+  }, []);
 
   // Cargar instructores desde la API
   useEffect(() => {
@@ -96,7 +117,7 @@ export default function FormularioHorario() {
     fetchProgramas();
   }, []);
 
-  // Cargar competencias del programa seleccionado y actualizar formData
+  // Cargar competencias del programa seleccionado
   useEffect(() => {
     if (selectedPrograma) {
       const fetchCompetencias = async () => {
@@ -122,7 +143,7 @@ export default function FormularioHorario() {
     }
   }, [selectedPrograma, programas]);
 
-  // Cargar RA de la competencia seleccionada y actualizar formData
+  // Cargar RA de la competencia seleccionada
   useEffect(() => {
     if (selectedCompetencia) {
       const fetchRA = async () => {
@@ -154,27 +175,24 @@ export default function FormularioHorario() {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    // Convertir campos a los tipos esperados por Prisma
+  
+    // Convertir los valores que esperan ser números
     const updatedFormData = {
       ...formData,
-      idInstructor: parseInt(formData.idInstructor.toString(), 10),
+      idInstructor: parseInt(formData.idInstructor.toString(), 10), // Convertir a número
       numeroTrimestre: parseInt(formData.numeroTrimestre.toString(), 10),
       anoTrimestre: parseInt(formData.anoTrimestre.toString(), 10),
-      horaInicio: new Date(formData.horaInicio),
-      horaFin: new Date(formData.horaFin),
     };
-
+  
     try {
       const response = await fetch('/api/horarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedFormData),
       });
-
+  
       if (response.ok) {
         alert('Horario guardado exitosamente');
         setFormData({
@@ -201,7 +219,7 @@ export default function FormularioHorario() {
       console.error('Error en el envío del formulario:', error);
     }
   };
-
+  
   return (
     <form className="container mx-auto my-8 px-4" onSubmit={handleSubmit}>
       <Titulo texto="Crear Horarios" />
@@ -214,12 +232,28 @@ export default function FormularioHorario() {
             value={formData.idInstructor}
             onChange={handleChange}
             required
-            className="w-full lg:w-96 p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full lg:w-1/2 p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Seleccione un Instructor</option>
-            {instructores.map(instructor => (
+            {instructores.map((instructor) => (
               <option key={instructor.idInstructor} value={instructor.idInstructor}>
                 {instructor.nombreInstructor}
+              </option>
+            ))}
+          </select>
+
+          <label htmlFor="numeroFicha" className="text-sm font-medium text-gray-700">Seleccione una Ficha</label>
+          <select
+            name="numeroFicha"
+            value={formData.numeroFicha}
+            onChange={handleChange}
+            required
+            className="w-full lg:w-1/2 p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione una Ficha</option>
+            {fichas.map((ficha) => (
+              <option key={ficha.idFicha} value={ficha.numeroFicha}>
+                {ficha.numeroFicha}
               </option>
             ))}
           </select>
@@ -274,8 +308,7 @@ export default function FormularioHorario() {
           </select>
         )}
 
-        {/* Campos adicionales del formulario */}
-        <input type="text" name="numeroFicha" placeholder="Número Ficha" onChange={handleChange} value={formData.numeroFicha} required className="w-full p-1.5 border border-gray-300 rounded-md" />
+        {/* Otros Campos */}
         <input type="text" name="nombreAmbiente" placeholder="Nombre Ambiente" onChange={handleChange} value={formData.nombreAmbiente} required className="w-full p-1.5 border border-gray-300 rounded-md" />
         <input type="text" name="bloque" placeholder="Bloque" onChange={handleChange} value={formData.bloque} required className="w-full p-1.5 border border-gray-300 rounded-md" />
         <input type="text" name="sede" placeholder="Sede" onChange={handleChange} value={formData.sede} required className="w-full p-1.5 border border-gray-300 rounded-md" />
