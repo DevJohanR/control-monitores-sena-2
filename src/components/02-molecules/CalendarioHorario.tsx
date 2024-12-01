@@ -29,8 +29,22 @@ const jornadas = ["Mañana", "Tarde", "Noche"];
 
 const CalendarioHorario: React.FC<CalendarioHorarioProps> = ({ horarios, tipoFiltro }) => {
   const getHorarios = (dia: string, jornada: string) => {
+    const normalizeString = (str: string) =>
+      str
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos y diacríticos
+
+    const normalizedDia = normalizeString(dia);
+    const normalizedJornada = normalizeString(jornada);
+
     return horarios
-      .filter((h) => h.diaSemana === dia && h.jornada === jornada)
+      .filter(
+        (h) =>
+          normalizeString(h.diaSemana) === normalizedDia &&
+          normalizeString(h.jornada) === normalizedJornada
+      )
       .map((h, index) => (
         <div
           key={index}

@@ -29,9 +29,24 @@ const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sába
 const jornadas = ["Mañana", "Tarde", "Noche"];
 
 const CalendarioAmbiente: React.FC<CalendarioAmbienteProps> = ({ horarios, tipoFiltro }) => {
+  // Función para normalizar cadenas
+  const normalizeString = (str: string) =>
+    str
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""); // Elimina acentos y diacríticos
+
   const getHorarios = (dia: string, jornada: string) => {
+    const normalizedDia = normalizeString(dia);
+    const normalizedJornada = normalizeString(jornada);
+
     return horarios
-      .filter((h) => h.diaSemana === dia && h.jornada === jornada)
+      .filter(
+        (h) =>
+          normalizeString(h.diaSemana) === normalizedDia &&
+          normalizeString(h.jornada) === normalizedJornada
+      )
       .map((h, index) => (
         <div
           key={index}
