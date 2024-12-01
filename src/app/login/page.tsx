@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import emailjs from "@emailjs/browser";
 import Logo from "@/components/01-atoms/Logo"; // Asegúrate de que el path sea correcto
-import { FaGithub } from "react-icons/fa"; // Importa el ícono de GitHub
+import { FaGithub, FaBookOpen } from "react-icons/fa"; // Importa los íconos necesarios
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -54,6 +54,10 @@ const Login = () => {
     }
   };
 
+  const handleDocumentationPage = () => {
+    router.push("/documentacion-page");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="flex flex-col items-center text-center">
@@ -63,11 +67,20 @@ const Login = () => {
         </div>
 
         {/* Descripción */}
-        <p className="max-w-xs text-lg text-gray-800 font-semibold leading-tight mb-8">
+        <p className="max-w-xs text-lg text-gray-800 font-semibold leading-tight mb-4">
           <span className="text-blue-600 font-bold">Aplicación</span> para el{" "}
           <span className="font-bold">control</span> de horarios{" "}
           <span className="text-blue-600 font-bold">instructores</span>
         </p>
+
+        {/* Botón de Documentación */}
+        <button
+          onClick={handleDocumentationPage}
+          className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out flex items-center gap-2 border-2 border-white hover:border-purple-700 mb-8"
+        >
+          <FaBookOpen className="text-lg" />
+          Documentación
+        </button>
 
         {/* Formulario */}
         <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
@@ -112,7 +125,7 @@ const Login = () => {
               rel="noopener noreferrer"
               className="text-blue-500 hover:underline"
             >
-               Desarrollado por DevJohanR
+              Desarrollado por DevJohanR
             </a>
           </p>
         </footer>

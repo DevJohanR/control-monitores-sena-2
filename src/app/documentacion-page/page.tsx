@@ -1,13 +1,51 @@
 'use client';
+import { useRouter } from "next/navigation";
 
-import { FaCheckCircle, FaExclamationCircle, FaLightbulb, FaClipboardCheck } from 'react-icons/fa';
+
+import { FaCheckCircle, FaExclamationCircle, FaLightbulb, FaClipboardCheck, FaGithub, FaBook } from "react-icons/fa";
+
 
 export default function Validaciones() {
+
+  const router = useRouter();
+
+  const handleNavigateToGithub = () => {
+    window.open("https://github.com/DevJohanR/control-monitores-sena-2", "_blank");
+  };
+
+  const handleNavigateToManual = () => {
+    router.push("/manual");
+  };
+
+
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">
         Documentación de Validaciones
       </h1>
+
+{/* Botones en línea */}
+<div className="flex justify-center gap-4 mb-8">
+        <button
+          onClick={handleNavigateToGithub}
+          className="bg-gray-900 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-800 flex items-center gap-2"
+        >
+          <FaGithub className="text-lg" />
+          Código Fuente
+        </button>
+        <button
+          onClick={handleNavigateToManual}
+          className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 flex items-center gap-2"
+        >
+          <FaBook className="text-lg" />
+          Manual
+        </button>
+      </div>
+
+
+
+
 
       {/* Validación por Instructor */}
       <section className="bg-white shadow-md rounded-lg p-6 mb-8">

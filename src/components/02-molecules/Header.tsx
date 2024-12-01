@@ -5,7 +5,7 @@ import React from 'react';
 
 import Logo from '../01-atoms/Logo';
 import Button from '../01-atoms/Button';
-import { FaPlus,FaBookOpen } from 'react-icons/fa';
+import { FaPlus,FaBookOpen, FaSignOutAlt} from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 
 
@@ -32,6 +32,11 @@ export default function Header() {
         router.push("/documentacion-page");
       };
     
+      const handleLogout = () => {
+        // Aquí puedes agregar la lógica para cerrar sesión, como limpiar tokens o llamar a una API.
+        console.log("Sesión cerrada");
+        router.push("/login"); // Redirige al usuario a la página de inicio de sesión
+    };
 
     return (
         <div className="fixed top-0 w-full flex justify-between items-center h-16 shadow-md bg-white px-6 z-50 text-gray-700">
@@ -74,6 +79,15 @@ export default function Header() {
           <FaBookOpen className="text-lg" />
           Documentación
         </button>
+
+         {/* Botón de Cerrar Sesión */}
+         <button
+                    onClick={handleLogout}
+                    className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition-all duration-300 ease-in-out flex items-center gap-2"
+                >
+                    <FaSignOutAlt className="text-lg" />
+                    Cerrar Sesión
+                </button>
             </div>
         </div>
     );
