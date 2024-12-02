@@ -3,9 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaYoutube, FaListAlt, FaExclamationTriangle } from "react-icons/fa";
-import { FaHome } from 'react-icons/fa';
-
+import { FaYoutube, FaListAlt, FaExclamationTriangle, FaCloud, FaHome } from "react-icons/fa";
 
 export default function Manual() {
   const router = useRouter();
@@ -19,19 +17,19 @@ export default function Manual() {
     setShowRequirements(!showRequirements);
   };
 
-
   const handleHome = () => {
     router.push("/");
-};
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
-           <button
-                onClick={handleHome}
-                className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
-            >
-                <FaHome className="text-lg" />
-                <span>Inicio</span>
-            </button>
+      <button
+        onClick={handleHome}
+        className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
+      >
+        <FaHome className="text-lg" />
+        <span>Inicio</span>
+      </button>
       <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">
         Panel de Información
       </h1>
@@ -109,7 +107,7 @@ export default function Manual() {
           </section>
 
           {/* EmailJS Section */}
-          <section className="bg-white shadow-md rounded-lg p-6">
+          <section className="bg-white shadow-md rounded-lg p-6 mb-10">
             <h2 className="text-2xl font-semibold text-blue-500 flex items-center gap-2 mb-4">
               EmailJS - Recuperación de Contraseñas
             </h2>
@@ -125,6 +123,37 @@ export default function Manual() {
               pueda recuperarla de manera rápida y segura. Es una herramienta ideal para este
               proyecto, ya que simplifica la gestión del correo electrónico, eliminando la
               necesidad de servidores adicionales para notificaciones.
+            </p>
+          </section>
+
+          {/* Cloudinary Section */}
+          <section className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-blue-500 flex items-center gap-2 mb-4">
+              <FaCloud /> Cloudinary - Gestión de Archivos PDF
+            </h2>
+            <Image
+              src="/images/cloudinary.png"
+              alt="Cloudinary"
+              width={400}
+              height={200}
+              className="rounded-lg shadow-lg mx-auto mb-6"
+            />
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Cloudinary es una herramienta confiable para almacenar archivos PDF de manera
+              gratuita. Con su versión gratuita, puedes manejar hasta <strong>~555 archivos PDF</strong> al año, 
+              considerando un tamaño promedio de <strong>45.8 KB por archivo</strong> y un límite mensual de 
+              <strong>25 GB</strong> de almacenamiento y ancho de banda. Esto es ideal para proyectos pequeños 
+              o medianos.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              <strong>Una observación:</strong> Puedes mantener el plan gratuito evitando cargas masivas 
+              o archivos demasiado grandes. Cuando el proyecto crezca y supere estos límites, considera 
+              pasar al plan Pro para obtener almacenamiento adicional y soporte prioritario.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              <strong>Cuándo usar la versión Pro:</strong> Si necesitas manejar más de 25 GB de archivos 
+              mensuales o tu proyecto involucra una gran cantidad de usuarios, sería ideal optar por el plan Pro 
+              para evitar limitaciones que puedan afectar la experiencia del usuario.
             </p>
           </section>
         </div>
