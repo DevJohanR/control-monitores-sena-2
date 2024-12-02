@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Header from "@/components/02-molecules/Header";
 
 export default function FormularioInstructor() {
   const [nombre, setNombre] = useState("");
@@ -112,7 +113,10 @@ export default function FormularioInstructor() {
   }, []);
 
   return (
-    <div className="container mx-auto my-8 px-4">
+<>
+    <Header/>
+
+    <div className="container mx-auto my-8 px-4 mt-20">
       <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
         Agregar Instructor
       </h2>
@@ -165,5 +169,6 @@ export default function FormularioInstructor() {
         ))}
       </ul>
     </div>
+    </>
   );
 }

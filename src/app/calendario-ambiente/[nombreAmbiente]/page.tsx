@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import CalendarioAmbiente from '@/components/02-molecules/CalendarioAmbiente';
 import { FaCalendarAlt } from 'react-icons/fa'; // Ícono para el título
+import Header from '@/components/02-molecules/Header';
 
 
 interface Horario {
@@ -55,7 +56,10 @@ export default function CalendarioAmbientePage() {
   }, [nombreAmbiente]);
 
   return (
-    <div className="container mx-auto p-6">
+<>
+    <Header/>
+    <div className="container mx-auto p-6 mt-16">
+     
     {/* Título estilizado */}
     <div className="flex items-center justify-center mb-8">
       <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
@@ -68,5 +72,6 @@ export default function CalendarioAmbientePage() {
     {/* Componente de calendario */}
     <CalendarioAmbiente horarios={horarios} tipoFiltro="Ambiente" />
   </div>
+  </>
   );
 }

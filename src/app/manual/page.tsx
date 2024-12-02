@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaYoutube, FaListAlt, FaExclamationTriangle } from "react-icons/fa";
+import { FaHome } from 'react-icons/fa';
+
 
 export default function Manual() {
   const router = useRouter();
@@ -17,8 +19,19 @@ export default function Manual() {
     setShowRequirements(!showRequirements);
   };
 
+
+  const handleHome = () => {
+    router.push("/");
+};
   return (
     <div className="container mx-auto px-4 py-8">
+           <button
+                onClick={handleHome}
+                className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
+            >
+                <FaHome className="text-lg" />
+                <span>Inicio</span>
+            </button>
       <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">
         Panel de Información
       </h1>

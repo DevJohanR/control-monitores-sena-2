@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Header from "@/components/02-molecules/Header";
 
 export default function FormularioFicha() {
   const [numeroFicha, setNumeroFicha] = useState("");
@@ -110,7 +111,9 @@ export default function FormularioFicha() {
   }, []);
 
   return (
-    <div className="container mx-auto my-8 px-4">
+<>
+    <Header/>
+    <div className="container mx-auto my-8 px-4 mt-20">
       <h2 className="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">
         Agregar Ficha
       </h2>
@@ -166,5 +169,6 @@ export default function FormularioFicha() {
         ))}
       </ul>
     </div>
+    </>
   );
 }

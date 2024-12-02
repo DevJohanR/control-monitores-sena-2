@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import TablaProgramas from "@/components/02-molecules/TablaProgramas";
+import Header from "@/components/02-molecules/Header";
 
 // Definimos las interfaces para los datos
 interface ProgramaData {
@@ -95,7 +96,10 @@ export default function GestionProgramas() {
   };
 
   return (
-    <div className="container mx-auto my-8 px-4">
+    <>
+    <Header/>
+   
+    <div className="container mx-auto my-8 px-4 mt-20">
       {/* Título estilizado */}
       <h2 className="text-3xl font-bold text-gray-700 mb-6 text-center">Agregar Programa</h2>
 
@@ -197,5 +201,6 @@ export default function GestionProgramas() {
         <TablaProgramas />
       </div>
     </div>
+    </>
   );
 }

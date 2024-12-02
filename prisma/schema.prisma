@@ -65,20 +65,19 @@ model Programa {
 
 model Competencia {
   idCompetencia     Int           @id @default(autoincrement())
-  nombreCompetencia String
+  nombreCompetencia String        @db.Text // Permite textos largos sin límite explícito
   programa          Programa      @relation(fields: [programaId], references: [idPrograma])
   programaId        Int
   ra                RA[]
 }
 
-  model RA {
-    idRA             Int         @id @default(autoincrement())
-    descripcionRA    String
-      acronimoRA    String?      // Nuevo campo para el acrónimo
-
-    competencia      Competencia @relation(fields: [competenciaId], references: [idCompetencia])
-    competenciaId    Int
-  }
+model RA {
+  idRA             Int         @id @default(autoincrement())
+  descripcionRA    String      @db.Text // Permite textos largos sin límite explícito
+  acronimoRA       String?     // Opcional, puede ser corto
+  competencia      Competencia @relation(fields: [competenciaId], references: [idCompetencia])
+  competenciaId    Int
+}
 
 
 model Archivo {

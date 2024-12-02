@@ -1,9 +1,9 @@
 'use client';
 import { useRouter } from "next/navigation";
+import { FaHome } from 'react-icons/fa';
 
 
 import { FaCheckCircle, FaExclamationCircle, FaLightbulb, FaClipboardCheck, FaGithub, FaBook } from "react-icons/fa";
-
 
 export default function Validaciones() {
 
@@ -17,14 +17,28 @@ export default function Validaciones() {
     router.push("/manual");
   };
 
+  const handleHome = () => {
+    router.push("/");
+};
+
 
 
   return (
-    <div className="container mx-auto px-4 py-8">
+ 
+    <div className="container mx-auto px-4 py-8 ">
+           <button
+                onClick={handleHome}
+                className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
+            >
+                <FaHome className="text-lg" />
+                <span>Inicio</span>
+            </button>
       <h1 className="text-4xl font-bold text-blue-600 text-center mb-6">
         Documentación de Validaciones
       </h1>
-
+    
+       
+     
 {/* Botones en línea */}
 <div className="flex justify-center gap-4 mb-8">
         <button
@@ -178,5 +192,6 @@ export default function Validaciones() {
         </div>
       </section>
     </div>
+    
   );
 }

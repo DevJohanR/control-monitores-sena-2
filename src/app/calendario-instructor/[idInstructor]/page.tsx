@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import CalendarioHorario from "@/components/02-molecules/CalendarioHorario";
 import { FaCalendarAlt } from "react-icons/fa";
+import Header from "@/components/02-molecules/Header";
 
 interface Horario {
   idHorario: number;
@@ -73,7 +74,9 @@ export default function CalendarioInstructor() {
   }, [idInstructor]);
 
   return (
-    <div className="container mx-auto p-6">
+<>
+    <Header/>
+    <div className="container mx-auto p-6 mt-16">
       {/* Título Mejorado */}
       <div className="flex items-center justify-center mb-8">
         <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
@@ -88,5 +91,6 @@ export default function CalendarioInstructor() {
       {/* Componente de Calendario */}
       <CalendarioHorario horarios={horarios} tipoFiltro="Instructor" />
     </div>
+    </>
   );
 }

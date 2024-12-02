@@ -5,7 +5,7 @@ import React from 'react';
 
 import Logo from '../01-atoms/Logo';
 import Button from '../01-atoms/Button';
-import { FaPlus,FaBookOpen, FaSignOutAlt} from 'react-icons/fa';
+import { FaPlus,FaBookOpen, FaSignOutAlt, FaSyncAlt, FaHome} from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 
 
@@ -38,11 +38,38 @@ export default function Header() {
         router.push("/login"); // Redirige al usuario a la página de inicio de sesión
     };
 
+
+    const handleRefresh = () => {
+        window.location.reload(); // Recarga la página actual
+    };
+
+    const handleHome = () => {
+        router.push("/");
+    };
+
+
     return (
         <div className="fixed top-0 w-full flex justify-between items-center h-16 shadow-md bg-white px-6 z-50 text-gray-700">
             <span><Logo /></span>
- 
+
             <div className="flex space-x-4">
+
+            <button
+                    onClick={handleHome}
+                    className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
+                >
+                    <FaHome className="text-lg" />
+                    <span>Inicio</span>
+                </button>
+
+
+            <button
+                    onClick={handleRefresh}
+                    className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-semibold italic transition-all duration-200"
+                >
+                    <FaSyncAlt className="text-lg" />
+                    <span>Actualizar</span>
+                </button>
             <Button 
                         text="Instructor" 
                         onClick={handleAddInstructor}
