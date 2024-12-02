@@ -15,8 +15,8 @@ const Login = () => {
 
   const handleLogin = () => {
     if (
-      email === "desarrollador7777@gmail.com" &&
-      password === "ClaveSeguraMiSena7777*"
+      email === "Demartinezf@sena.edu.co" &&
+      password === "C7h9*K2j5"
     ) {
       localStorage.setItem("isAuthenticated", "true");
       router.push("/"); // Redirige a la página principal

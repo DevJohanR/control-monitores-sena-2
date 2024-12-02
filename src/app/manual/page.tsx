@@ -12,7 +12,7 @@ export default function Manual() {
   const [showRequirements, setShowRequirements] = useState(false);
 
   const handleNavigateToTutorial = () => {
-    window.open("https://www.youtube.com", "_blank"); // Cambia por el enlace a tu tutorial
+    window.open("https://youtu.be/Kn8G2I5SGjE", "_blank"); // Cambia por el enlace a tu tutorial
   };
 
   const toggleRequirements = () => {
