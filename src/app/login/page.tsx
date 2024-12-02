@@ -125,7 +125,7 @@ const Login = () => {
               rel="noopener noreferrer"
               className="text-blue-500 hover:underline"
             >
-              Desarrollado por DevJohanR
+              Desarrollado por DevJohanR - Analisis y Desarrollo de Software (2721397)
             </a>
           </p>
         </footer>
