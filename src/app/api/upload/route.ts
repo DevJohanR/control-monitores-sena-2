@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import cloudinary from "cloudinary";
+import fs from "fs/promises";
+import path from "path";
 
 const prisma = new PrismaClient();
 
-// Configuración directa de Cloudinary con las credenciales proporcionadas
-cloudinary.v2.config({
-  cloud_name: "dpdwap5il", // Tu Cloud Name
-  api_key: "137812973758369", // Tu API Key
-  api_secret: "BfYkKWvvX8nKZhyUrFAedN8XCo4", // Tu API Secret
-});
-
+// POST - Subir un archivo
 export async function POST(request: Request) {
   try {
     const data = await request.formData();
@@ -24,30 +19,45 @@ export async function POST(request: Request) {
       );
     }
 
-    // Convertir el archivo en un buffer para subirlo a Cloudinary
-    const buffer = Buffer.from(await file.arrayBuffer());
+    // Normalizar nombre del archivo y programa
+    const programa = programaPerteneciente.toUpperCase().trim();
 
-    // Subir el archivo a Cloudinary usando `upload`
-    const uploadResult = await cloudinary.v2.uploader.upload(
-      `data:${file.type};base64,${buffer.toString("base64")}`,
-      {
-        resource_type: "raw", // Para archivos PDF u otros no estándar
-        folder: "uploads",
-        public_id: `${Date.now()}-${file.name}`.replace(/\s+/g, "_"),
-      }
-    );
+    // Verificar si ya existe un archivo para este programa
+    const existingArchivo = await prisma.archivo.findFirst({
+      where: { programaPerteneciente: programa },
+    });
 
-    // Verificar que se obtuvo la URL segura
-    if (!uploadResult.secure_url) {
-      throw new Error("Error al subir archivo a Cloudinary");
+    if (existingArchivo) {
+      return NextResponse.json(
+        { error: "Ya existe un archivo para este programa. Por favor, elimínalo primero." },
+        { status: 409 } // Código 409: Conflicto
+      );
     }
 
-    // Guardar la información del archivo en la base de datos
+    // Normalizar nombre del archivo
+    const fileName = `${Date.now()}-${file.name}`.toUpperCase().trim().replace(/\s+/g, "_");
+
+    // Ruta de la carpeta `uploads`
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+
+    // Crear la carpeta `uploads` si no existe
+    try {
+      await fs.access(uploadDir);
+    } catch {
+      await fs.mkdir(uploadDir, { recursive: true });
+    }
+
+    // Guardar el nuevo archivo
+    const filePath = path.join(uploadDir, fileName);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+
+    // Registrar el archivo en la base de datos
     const newArchivo = await prisma.archivo.create({
       data: {
-        nombre: file.name,
-        ruta: uploadResult.secure_url,
-        programaPerteneciente: programaPerteneciente.toUpperCase().trim(),
+        nombre: fileName,
+        ruta: `/uploads/${fileName}`,
+        programaPerteneciente: programa,
       },
     });
 
