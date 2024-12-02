@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import CalendarioHorario from "@/components/02-molecules/CalendarioHorario";
 import { FaCalendarAlt } from "react-icons/fa";
 import Header from "@/components/02-molecules/Header";
+import html2canvas from "html2canvas"; // Importamos html2canvas
 
 interface Horario {
   idHorario: number;
@@ -73,24 +74,61 @@ export default function CalendarioInstructor() {
     fetchInstructor();
   }, [idInstructor]);
 
-  return (
-<>
-    <Header/>
-    <div className="container mx-auto p-6 mt-16">
-      {/* Título Mejorado */}
-      <div className="flex items-center justify-center mb-8">
-        <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
-        <h2 className="text-3xl font-bold text-gray-700">
-          Calendario de Horarios de{" "}
-          <span className="text-blue-500">
-            {instructor?.nombreInstructor || "Instructor"}
-          </span>
-        </h2>
-      </div>
+  // Función para exportar el calendario como imagen
+  const exportarAImagen = async () => {
+    const input = document.getElementById("calendario");
+    if (!input) return;
 
-      {/* Componente de Calendario */}
-      <CalendarioHorario horarios={horarios} tipoFiltro="Instructor" />
-    </div>
+    // Opciones para html2canvas
+    const options = {
+      scale: 2, // Aumenta la resolución de la imagen
+      useCORS: true, // Habilita CORS para cargar fuentes e imágenes externas
+    };
+
+    // Captura el contenido del div con id 'calendario'
+    const canvas = await html2canvas(input, options);
+
+    // Convierte el canvas a una imagen en formato PNG
+    const imgData = canvas.toDataURL("image/png");
+
+    // Crea un enlace temporal para descargar la imagen
+    const link = document.createElement("a");
+    link.href = imgData;
+    link.download = `Calendario_Instructor_${instructor?.nombreInstructor || "Instructor"}.png`;
+    link.click();
+  };
+
+  return (
+    <>
+      <Header />
+      <div className="container mx-auto p-6 mt-16">
+        {/* Botón para exportar a imagen */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={exportarAImagen}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Exportar a Imagen
+          </button>
+        </div>
+
+        {/* Envolver el título y el calendario dentro del div con id 'calendario' */}
+        <div id="calendario">
+          {/* Título Mejorado */}
+          <div className="flex items-center justify-center mb-8">
+            <FaCalendarAlt className="text-blue-500 text-3xl mr-2" />
+            <h2 className="text-3xl font-bold text-gray-700">
+              Calendario de Horarios de{" "}
+              <span className="text-blue-500">
+                {instructor?.nombreInstructor || "Instructor"}
+              </span>
+            </h2>
+          </div>
+
+          {/* Componente de Calendario */}
+          <CalendarioHorario horarios={horarios} tipoFiltro="Instructor" />
+        </div>
+      </div>
     </>
   );
 }
