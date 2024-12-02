@@ -138,23 +138,24 @@ export default function Manual() {
               height={200}
               className="rounded-lg shadow-lg mx-auto mb-6"
             />
-            <p className="text-gray-700 leading-relaxed mb-6">
-              Cloudinary es una herramienta confiable para almacenar archivos PDF de manera
-              gratuita. Con su versión gratuita, puedes manejar hasta <strong>~555 archivos PDF</strong> al año, 
-              considerando un tamaño promedio de <strong>45.8 KB por archivo</strong> y un límite mensual de 
-              <strong>25 GB</strong> de almacenamiento y ancho de banda. Esto es ideal para proyectos pequeños 
-              o medianos.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              <strong>Una observación:</strong> Puedes mantener el plan gratuito evitando cargas masivas 
-              o archivos demasiado grandes. Cuando el proyecto crezca y supere estos límites, considera 
-              pasar al plan Pro para obtener almacenamiento adicional y soporte prioritario.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              <strong>Cuándo usar la versión Pro:</strong> Si necesitas manejar más de 25 GB de archivos 
-              mensuales o tu proyecto involucra una gran cantidad de usuarios, sería ideal optar por el plan Pro 
-              para evitar limitaciones que puedan afectar la experiencia del usuario.
-            </p>
+          <p className="text-gray-700 leading-relaxed mb-6">
+  Este proyecto requiere obligatoriamente el uso de <strong>Cloudinary Pro</strong> para habilitar la funcionalidad de carga de archivos. La razón técnica detrás de esta necesidad radica en que Vercel, la plataforma utilizada para desplegar esta aplicación, no permite la carga directa de archivos al servidor. En su lugar, es necesario utilizar un servicio externo especializado como Cloudinary para gestionar el almacenamiento y procesamiento de archivos. Puedes consultar más detalles sobre las limitaciones de Vercel en su documentación oficial: 
+  <a 
+    href="https://vercel.com/docs/platform/limits#streaming-and-form-data" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="text-blue-500 underline"
+  >
+    Vercel Platform Limits
+  </a>.
+</p>
+<p className="text-gray-700 leading-relaxed mb-6">
+  <strong>Nota técnica:</strong> Sin la versión Pro de Cloudinary, las capacidades necesarias para este proyecto, como la generación de URLs seguras para archivos, el manejo de grandes cantidades de datos, y la garantía de disponibilidad en producción, no están habilitadas. Esto se debe a que la API en la versión gratuita tiene limitaciones estrictas que no permiten la integración adecuada en proyectos a escala.
+</p>
+<p className="text-gray-700 leading-relaxed mb-6">
+  Por lo tanto, si no cuentas con Cloudinary Pro, la función de carga de archivos estará completamente inhabilitada, afectando directamente la experiencia del usuario y el propósito principal de esta aplicación.
+</p>
+
           </section>
         </div>
       )}
