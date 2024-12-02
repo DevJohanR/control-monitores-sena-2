@@ -4,6 +4,17 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Define los tipos para las competencias y RA
+interface Ra {
+  descripcionRA: string;
+  acronimoRA: string;
+}
+
+interface Competencia {
+  nombreCompetencia: string;
+  ra: Ra[];
+}
+
 // Obtener todos los programas con competencias y RA
 export async function GET() {
   try {
@@ -26,7 +37,7 @@ export async function GET() {
 // Crear un nuevo programa con competencias y RA
 export async function POST(request: Request) {
   const data = await request.json();
-  const { nombrePrograma, competencias } = data;
+  const { nombrePrograma, competencias }: { nombrePrograma: string; competencias: Competencia[] } = data;
 
   try {
     const newPrograma = await prisma.programa.create({
