@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+
 import { toast } from "react-toastify";
 import Header from "@/components/02-molecules/Header";
 
 export default function FormularioInstructor() {
   const [nombre, setNombre] = useState("");
   const [instructores, setInstructores] = useState([]); // Estado para los instructores
-  const router = useRouter();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

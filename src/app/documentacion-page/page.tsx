@@ -101,14 +101,14 @@ export default function Validaciones() {
           </li>
         </ul>
         <p className="text-gray-700 mb-4">
-          <strong>Sin embargo:</strong> Si los nombres de los ambientes pueden repetirse entre sedes (por ejemplo, ambas sedes tienen un "Laboratorio 1"), se incluyó la sede como criterio adicional en la validación. Esto asegura que los solapamientos solo se detecten dentro de la misma sede.
+          <strong>Sin embargo:</strong> Si los nombres de los ambientes pueden repetirse entre sedes (por ejemplo, ambas sedes tienen un Laboratorio 1), se incluyó la sede como criterio adicional en la validación. Esto asegura que los solapamientos solo se detecten dentro de la misma sede.
         </p>
         <p className="text-gray-700 mb-4">
           <strong>Por ejemplo:</strong>
         </p>
         <ul className="list-disc list-inside text-gray-700 mb-4">
-          <li>En Sede A, "Laboratorio 1" está reservado el lunes de 8:00 a 10:00.</li>
-          <li>En Sede B, también hay un "Laboratorio 1", pero puede ser reservado el mismo lunes de 8:00 a 10:00 porque pertenece a una sede diferente.</li>
+          <li>En Sede A, Laboratorio 1 está reservado el lunes de 8:00 a 10:00.</li>
+          <li>En Sede B, también hay un Laboratorio 1, pero puede ser reservado el mismo lunes de 8:00 a 10:00 porque pertenece a una sede diferente.</li>
         </ul>
         <p className="text-gray-700">
           Con la validación por sede, no se detectarán falsos solapamientos entre ambientes que pertenecen a sedes distintas.

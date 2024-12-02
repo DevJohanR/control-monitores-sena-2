@@ -30,7 +30,7 @@ export default function HorarioInstructor() {
   const [horarios, setHorarios] = useState<Horario[]>([]);
   const [loading, setLoading] = useState(true);
   const [instructores, setInstructores] = useState<Instructor[]>([]); // Lista de instructores
-  const [selectedInstructor, setSelectedInstructor] = useState<number | null>(null); // Instructor seleccionado
+ // const [selectedInstructor, setSelectedInstructor] = useState<number | null>(null); // Instructor seleccionado
   const router = useRouter();
 
   // Cargar los horarios desde la API
