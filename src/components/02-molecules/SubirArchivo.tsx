@@ -32,7 +32,12 @@ export default function Archivos() {
   const fetchProgramas = async () => {
     console.log("Obteniendo programas...");
     try {
-      const res = await fetch("/api/programas");
+      const res = await fetch("/api/programas", {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      });
       if (!res.ok) {
         console.error("Error al obtener programas:", res.statusText);
         return;
@@ -48,8 +53,12 @@ export default function Archivos() {
   const fetchArchivos = async () => {
     console.log("Obteniendo archivos...");
     try {
-      // Añadir timestamp para evitar posibles problemas de caché
-      const res = await fetch(`/api/archivos?timestamp=${Date.now()}`);
+      const res = await fetch(`/api/archivos?timestamp=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      });
       if (!res.ok) {
         console.error("Error al obtener archivos:", res.statusText);
         return;
@@ -90,6 +99,7 @@ export default function Archivos() {
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
+        cache: 'no-store'
       });
 
       const data = await res.json();
@@ -118,6 +128,7 @@ export default function Archivos() {
       console.log("Eliminando archivo con id:", id);
       const res = await fetch(`/api/archivos/${id}`, {
         method: "DELETE",
+        cache: 'no-store'
       });
 
       if (res.ok) {
