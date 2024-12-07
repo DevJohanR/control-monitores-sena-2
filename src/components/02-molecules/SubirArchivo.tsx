@@ -22,7 +22,7 @@ export default function Archivos() {
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string>("");
 
-  // Cargar programas disponibles
+  // Cargar programas y archivos
   useEffect(() => {
     fetchProgramas();
     fetchArchivos();
@@ -74,9 +74,9 @@ export default function Archivos() {
       setFile(null);
       setSelectedPrograma("");
     } else if (res.status === 409) {
-      setMessage(data.error); // Mensaje: Ya existe un archivo para este programa
+      setMessage(data.error);
     } else {
-      setMessage(data.error || "Error al subir el archivo.");
+      setMessage("Error al subir el archivo.");
     }
   };
 

@@ -11,10 +11,7 @@ export async function GET() {
     });
     return NextResponse.json(archivos);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error: "Error al listar los archivos" },
-      { status: 500 }
-    );
+    console.error("Error al listar los archivos:", error);
+    return NextResponse.json({ error: "Error al listar los archivos" }, { status: 500 });
   }
 }
