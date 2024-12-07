@@ -20,7 +20,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error al listar los archivos:", error);
 
-    // Respuesta de error en caso de fallo
+    // Respuesta de error en caso de fallo 1
     return NextResponse.json(
       { error: "Error al listar los archivos" },
       { status: 500 }
