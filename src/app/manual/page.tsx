@@ -3,14 +3,23 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaYoutube, FaListAlt, FaExclamationTriangle, FaCloud, FaHome } from "react-icons/fa";
+import {
+  FaYoutube,
+  FaListAlt,
+  FaExclamationTriangle,
+  FaCloud,
+  FaHome,
+  FaCreditCard,
+  FaCheckCircle,
+
+} from "react-icons/fa";
 
 export default function Manual() {
   const router = useRouter();
   const [showRequirements, setShowRequirements] = useState(false);
 
   const handleNavigateToTutorial = () => {
-    window.open("https://youtu.be/Kn8G2I5SGjE", "_blank"); // Cambia por el enlace a tu tutorial
+    window.open("https://youtu.be/Kn8G2I5SGjE", "_blank");
   };
 
   const toggleRequirements = () => {
@@ -51,7 +60,7 @@ export default function Manual() {
           className="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center gap-2"
         >
           <FaListAlt className="text-lg" />
-          Ver Requisitos de Funcionamiento
+          Herramientas y Configuración Recomendadas
         </button>
         <button
           onClick={handleNavigateToTutorial}
@@ -60,6 +69,23 @@ export default function Manual() {
           <FaYoutube className="text-lg" />
           Tutorial para Cargar Horarios
         </button>
+      </div>
+
+      {/* Nueva sección de alerta */}
+      <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-lg mb-8 flex items-start gap-4">
+        <FaCreditCard className="text-red-600 text-4xl" />
+        <div>
+          <h2 className="text-xl font-bold text-red-600 mb-2">
+            ¡Importante para adquirir los servicios recomendados!
+          </h2>
+          <p className="text-gray-800 leading-relaxed">
+            Los servicios mencionados a continuación, como AWS S3, Hostinger y EmailJS, requieren
+            una <strong>suscripción con tarjeta de crédito</strong>. Ten en cuenta que estas empresas
+            cobran en <strong>dólares</strong>, y algunos servicios podrían tener costos adicionales
+            dependiendo del uso. Es importante planificar el presupuesto para evitar sorpresas
+            en la facturación.
+          </p>
+        </div>
       </div>
 
       {showRequirements && (
@@ -82,6 +108,34 @@ export default function Manual() {
               asegura que los usuarios puedan acceder al sistema sin interrupciones en cualquier
               momento. Gracias a su integración perfecta con Next.js, Vercel garantiza que este
               aplicativo opere de manera óptima las 24 horas del día.
+            </p>
+          </section>
+
+          {/* AWS S3 Section */}
+          <section className="bg-white shadow-md rounded-lg p-6 mb-10">
+            <h2 className="text-2xl font-semibold text-blue-500 flex items-center gap-2 mb-4">
+              <FaCloud /> AWS S3 - Almacenamiento de Archivos
+            </h2>
+            <Image
+              src="/images/cloudinary.png"
+              alt="AWS S3 Storage"
+              width={400}
+              height={200}
+              className="rounded-lg shadow-lg mx-auto mb-6"
+            />
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Este proyecto utiliza <strong>AWS S3</strong> para gestionar el almacenamiento de archivos PDF debido a su fiabilidad y escalabilidad. AWS S3 incluye una capa gratuita de 12 meses con 5 GB de almacenamiento, 20,000 solicitudes GET, y 2,000 solicitudes PUT o LIST. Esto hace que sea ideal para proyectos pequeños o en fase de pruebas.
+              <a
+                href="https://aws.amazon.com/s3/pricing/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                Consulta los precios de AWS S3 aquí
+              </a>.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              <strong>Importante:</strong> Para habilitar las operaciones de escritura, lectura, y eliminación de archivos, se requiere configurar las políticas de acceso en el bucket de S3. Asegúrate de incluir permisos como <code>s3:PutObject</code>, <code>s3:GetObject</code>, y <code>s3:DeleteObject</code>. También puedes habilitar el <em>bloqueo de acceso público</em> para mayor seguridad.
             </p>
           </section>
 
@@ -126,36 +180,69 @@ export default function Manual() {
             </p>
           </section>
 
-          {/* Cloudinary Section */}
-          <section className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-blue-500 flex items-center gap-2 mb-4">
-              <FaCloud /> Cloudinary - Gestión de Archivos PDF
+          {/* Nueva sección destacada */}
+          <section className="bg-gray-900 text-white shadow-md rounded-lg p-6 mb-10">
+            <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+              <FaCheckCircle className="text-green-500" /> Uso de GitHub y Personalización
             </h2>
-            <Image
-              src="/images/cloudinary.png"
-              alt="Cloudinary"
-              width={400}
-              height={200}
-              className="rounded-lg shadow-lg mx-auto mb-6"
-            />
-          <p className="text-gray-700 leading-relaxed mb-6">
-  Este proyecto requiere obligatoriamente el uso de <strong>Cloudinary Pro</strong> para habilitar la funcionalidad de carga de archivos. La razón técnica detrás de esta necesidad radica en que Vercel, la plataforma utilizada para desplegar esta aplicación, no permite la carga directa de archivos al servidor. En su lugar, es necesario utilizar un servicio externo especializado como Cloudinary para gestionar el almacenamiento y procesamiento de archivos. Puedes consultar más detalles sobre las limitaciones de Vercel en su documentación oficial: 
-  <a 
-    href="https://vercel.com/docs/platform/limits#streaming-and-form-data" 
-    target="_blank" 
-    rel="noopener noreferrer" 
-    className="text-blue-500 underline"
-  >
-    Vercel Platform Limits
-  </a>.
-</p>
-<p className="text-gray-700 leading-relaxed mb-6">
-  <strong>Nota técnica:</strong> Sin la versión Pro de Cloudinary, las capacidades necesarias para este proyecto, como la generación de URLs seguras para archivos, el manejo de grandes cantidades de datos, y la garantía de disponibilidad en producción, no están habilitadas. Esto se debe a que la API en la versión gratuita tiene limitaciones estrictas que no permiten la integración adecuada en proyectos a escala.
-</p>
-<p className="text-gray-700 leading-relaxed mb-6">
-  Por lo tanto, si no cuentas con Cloudinary Pro, la función de carga de archivos estará completamente inhabilitada, afectando directamente la experiencia del usuario y el propósito principal de esta aplicación.
-</p>
-
+            <p className="leading-relaxed mb-4">
+              Este proyecto ha sido diseñado para producción, lo que significa que está optimizado
+              para ser desplegado en un entorno accesible para usuarios finales, con un rendimiento
+              confiable y configuraciones específicas. Sin embargo, también puedes adaptarlo a un
+              entorno local siguiendo estas recomendaciones:
+            </p>
+            <ul className="list-disc pl-6 text-gray-300">
+              <li className="mb-2">Haz un <strong>fork</strong> del repositorio en GitHub.</li>
+              <li className="mb-2">
+                Configura el archivo <code>.env</code> con las credenciales de servicios.
+              </li>
+              <li className="mb-2">
+                Instala las siguientes herramientas necesarias:
+                <ul className="list-disc pl-4 mt-2">
+                  <li className="mb-1">
+                    <a
+                      href="https://nodejs.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      Node.js
+                    </a> (ejecuta el backend y frontend).
+                  </li>
+                  <li className="mb-1">
+                    <a
+                      href="https://www.mysql.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      MySQL
+                    </a> (base de datos).
+                  </li>
+                  <li className="mb-1">
+                    <a
+                      href="https://code.visualstudio.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      Visual Studio Code
+                    </a> (editor de código recomendado).
+                  </li>
+                  <li className="mb-1">
+                    <a
+                      href="https://www.typescriptlang.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      TypeScript
+                    </a> (compatibilidad con el código del proyecto).
+                  </li>
+                </ul>
+              </li>
+              <li className="mb-2">Ejecuta el proyecto localmente con <code>npm run dev</code>.</li>
+            </ul>
           </section>
         </div>
       )}
