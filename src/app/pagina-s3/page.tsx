@@ -26,7 +26,7 @@ export default function ListaArchivos() {
 
   return (
     <div>
-      <h1>Lista de Archivos Subidos</h1>
+      <h1>Lista de Archivos Subidos.</h1>
       <ul>
         {archivos.map((archivo) => (
           <li key={archivo.id}>
